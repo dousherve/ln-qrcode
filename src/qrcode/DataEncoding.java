@@ -14,8 +14,17 @@ public final class DataEncoding {
 	 * @return
 	 */
 	public static boolean[] byteModeEncoding(String input, int version) {
-		// TODO Implementer
-		return null;
+		
+	    final int MAX_CHAR_COUNT = QRCodeInfos.getMaxInputLength(version);
+	    final int MAX_BYTE_COUNT = QRCodeInfos.getCodeWordsLength(version);
+	    final int ECC_COUNT = QRCodeInfos.getECCLength(version);
+	    
+	    final int[] ENCODED_STRING = encodeString(input, MAX_CHAR_COUNT);
+	    final int[] ENCODED_WITH_INFOS = addInformations(ENCODED_STRING);
+	    final int[] ENCODED_PADDED = fillSequence(ENCODED_WITH_INFOS, MAX_BYTE_COUNT);
+	    final int[] ENCODED_PADDED_ECC = addErrorCorrection(ENCODED_PADDED, ECC_COUNT);
+	 
+		return bytesToBinaryArray(ENCODED_PADDED_ECC);
 	}
 
 	/**
@@ -51,18 +60,19 @@ public final class DataEncoding {
 	 */
 	public static int[] addInformations(int[] inputBytes) {
 	 
-		final int BYTE_MODE_FLAG = 0b0100 << 4;
+		final int BYTE_MODE_FLAG = 0b0100;
 		final int INPUT_BYTES_LENGTH = inputBytes.length;
-		
 		final int DATA_LENGTH = INPUT_BYTES_LENGTH + 2;
+		
 		int[] data = new int[DATA_LENGTH];
 		
-		// First byte
-		data[0] = BYTE_MODE_FLAG | (INPUT_BYTES_LENGTH & 0xF0);
-		// Second byte
+		// Fill the first byte (byte mode flag + 4 MSB of the length of the data)
+		data[0] = (BYTE_MODE_FLAG << 4) | ((INPUT_BYTES_LENGTH & 0xF0) >> 4);
+		// Fill the second byte (4 LSB of the length of the data + 4 MSB of the first data byte)
 		data[1] = ((INPUT_BYTES_LENGTH & 0x0F) << 4) | ((inputBytes[0] & 0xF0) >> 4);
 		// Fill the data from the third byte to the (DATA_LENGTH - 1)-th byte
         for (int i = 2; i < DATA_LENGTH - 1; ++i) {
+            // We offset i by -2 and -1 because of the header which consists of ~2 bytes
             data[i] = ((inputBytes[i - 2] & 0x0F) << 4) | ((inputBytes[i - 1] & 0xF0) >> 4);
         }
         // Fill the last byte and shift left to add the '0000' end sequence
@@ -95,7 +105,7 @@ public final class DataEncoding {
 	    
         for (int i = 0; i < finalLength - ENCODED_LENGTH; ++i) {
             int index = i + ENCODED_LENGTH;
-            paddedData[index] = i % 2 == 0 ? 236 : 17;
+            paddedData[index] = (i % 2 == 0) ? 236 : 17;
         }
 	    
 		return paddedData;
@@ -111,8 +121,19 @@ public final class DataEncoding {
 	 * @return the original data concatenated with the error correction
 	 */
 	public static int[] addErrorCorrection(int[] encodedData, int eccLength) {
-		// TODO Implementer
-		return null;
+		
+	    final int ENCODED_LENGTH = encodedData.length;
+	    
+	    int[] dataWithCorrection = new int[ENCODED_LENGTH + eccLength];
+	    System.arraycopy(encodedData, 0, dataWithCorrection, 0, ENCODED_LENGTH);
+	    
+	    int[] correctionBytes = ErrorCorrectionEncoding.encode(encodedData, eccLength);
+        
+        for (int i = ENCODED_LENGTH; i < dataWithCorrection.length; ++i) {
+            dataWithCorrection[i] = correctionBytes[i - ENCODED_LENGTH];
+        }
+	 
+		return dataWithCorrection;
 	}
 
 	/**
@@ -124,8 +145,18 @@ public final class DataEncoding {
 	 * @return a boolean array representing the data in binary
 	 */
 	public static boolean[] bytesToBinaryArray(int[] data) {
-		// TODO Implementer
-		return null;
+        
+        boolean[] binaryArray = new boolean[data.length * 8];
+        
+        for (int i = 0; i < data.length; ++i) {
+            int mask = 0b1000_0000;
+            for (int j = 0; j < 8; ++j) {
+                binaryArray[8 * i + j] = (data[i] & mask) == mask;
+                mask >>= 1;
+            }
+        }
+	 
+		return binaryArray;
 	}
 
 }

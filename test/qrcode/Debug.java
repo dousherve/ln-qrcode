@@ -35,12 +35,12 @@ public class Debug {
 		
 		//test2.testAddDataInformation();
 		
-		int[] data = {34, 13, 52, 2, 9, 201, 10, 0, 59, 100};
-		int[] output = DataEncoding.fillSequence(data, 19);
+		int[] data = {170, 15};
+		boolean[] output = DataEncoding.bytesToBinaryArray(data);
 		
 		for (int i = 0; i < output.length; i++) {
 			System.out.print(output[i]);
-			if (i < output.length - 1) {
+			if (i < output.length - 1 && (i+1) % 8 != 0) {
 				System.out.print(", ");
 			} else {
 				System.out.print('\n');

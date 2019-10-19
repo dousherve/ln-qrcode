@@ -4,6 +4,7 @@
     <list default="true" id="7c153a1d-d7db-49c1-81ab-97e6e44c19d2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/qrcode/DataEncoding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/DataEncoding.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/qrcode/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/qrcode/Debug.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/qrcode/Debug.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.DataEncodingTest">
     <configuration name="Debug" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="qrcode.Debug" />
       <module name="QRCode" />
@@ -71,9 +72,39 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="qrcode.Main" />
+      <module name="QRCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="qrcode.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DataEncodingTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="QRCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="qrcode.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="qrcode" />
+      <option name="MAIN_CLASS_NAME" value="qrcode.DataEncodingTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.DataEncodingTest" />
         <item itemvalue="Application.Debug" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -89,7 +120,7 @@
       <updated>1571494631598</updated>
       <workItem from="1571494637922" duration="248000" />
       <workItem from="1571496806817" duration="103000" />
-      <workItem from="1571496942684" duration="8184000" />
+      <workItem from="1571496942684" duration="14267000" />
     </task>
     <task id="LOCAL-00001" summary="Updated .gitignore">
       <created>1571497798471</created>
@@ -105,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571505980405</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implemented 'fillSequence'">
+      <created>1571507594670</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1571507594670</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -127,6 +165,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated .gitignore" />
     <MESSAGE value="Imported JUnit5.4, implemented 'encodeString' and 'addInformations'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Imported JUnit5.4, implemented 'encodeString' and 'addInformations'" />
+    <MESSAGE value="Implemented 'fillSequence'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented 'fillSequence'" />
   </component>
 </project>
