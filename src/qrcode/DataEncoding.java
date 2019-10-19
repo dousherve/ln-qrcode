@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 
 import reedsolomon.ErrorCorrectionEncoding;
 
+import static qrcode.Util.toInt;
+
 public final class DataEncoding {
 
 	/**
@@ -21,13 +23,23 @@ public final class DataEncoding {
 	 *            The string to convert to ISO-8859-1
 	 * @param maxLength
 	 *          The maximal number of bytes to encode (will depend on the version of the QR code) 
-	 * @return A array that represents the input in ISO-8859-1. The output is
+	 * @return An array that represents the input in ISO-8859-1. The output is
 	 *         truncated to fit the version capacity
 	 */
 	public static int[] encodeString(String input, int maxLength) {
-		// TODO Implementer
-
-		return null;
+		
+		byte[] tabByte = input.getBytes(StandardCharsets.ISO_8859_1);
+		
+		// The length of the "encoded" array is the smallest value
+		// between tabByte's length and the maxLength parameter.
+		final int ENCODED_LENGTH = Math.min(tabByte.length, maxLength);
+		int[] encoded = new int[ENCODED_LENGTH];
+		
+		for (int i = 0; i < ENCODED_LENGTH; i++) {
+			encoded[i] = toInt(tabByte[i]);
+		}
+		
+		return encoded;
 	}
 
 	/**
@@ -38,8 +50,25 @@ public final class DataEncoding {
 	 * @return The input bytes with an header giving the type and size of the data
 	 */
 	public static int[] addInformations(int[] inputBytes) {
-		// TODO Implementer
-		return null;
+		
+		final int BYTE_MODE_FLAG = 0b0100 << 4;
+		final int INPUT_BYTES_LENGTH = inputBytes.length;
+		
+		final int DATA_LENGTH = INPUT_BYTES_LENGTH + 2;
+		int[] data = new int[DATA_LENGTH];
+		
+		// First byte
+		data[0] = BYTE_MODE_FLAG | (INPUT_BYTES_LENGTH & 0xF0);
+		// Second byte
+		data[1] = ((INPUT_BYTES_LENGTH & 0x0F) << 4) | ((inputBytes[0] & 0xF0) >> 4);
+		// Fill the data from the third byte to the (DATA_LENGTH - 1)-th byte
+        for (int i = 2; i < DATA_LENGTH - 1; i++) {
+            data[i] = ((inputBytes[i - 2] & 0x0F) << 4) | ((inputBytes[i - 1] & 0xF0) >> 4);
+        }
+        // Fill the last byte and shift left to add the '0000' end sequence
+        data[DATA_LENGTH - 1] = (inputBytes[INPUT_BYTES_LENGTH - 1] & 0x0F) << 4;
+		
+		return data;
 	}
 
 	/**

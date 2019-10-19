@@ -9,7 +9,7 @@ public class Debug {
 		 * 		MatrixConstructionTest01
 
 		 */
-		MatrixConstructionTest01 test1 = new MatrixConstructionTest01();
+		//MatrixConstructionTest01 test1 = new MatrixConstructionTest01();
 
 		//test1.testInitializePatternsV1();
 		
@@ -25,7 +25,7 @@ public class Debug {
 		 * 		MatrixConstructionTest02
 		 */
 		
-		MatrixConstructionTest02 test2 = new MatrixConstructionTest02();
+		//MatrixConstructionTest02 test2 = new MatrixConstructionTest02();
 		
 		//test2.testRenderQRCodeMatrixV1();
 		
@@ -35,9 +35,18 @@ public class Debug {
 		
 		//test2.testAddDataInformation();
 		
+		int[] bytes = {254, 254, 254, 254, 254};
+		int[] output = DataEncoding.addInformations(bytes);
 		
-
-
+		for (int i = 0; i < output.length; i++) {
+			System.out.print(output[i]);
+			if (i < output.length - 1) {
+				System.out.print(", ");
+			} else {
+				System.out.print('\n');
+			}
+		}
+		
 	}
 
 }
