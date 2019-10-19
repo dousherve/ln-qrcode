@@ -35,8 +35,8 @@ public class Debug {
 		
 		//test2.testAddDataInformation();
 		
-		int[] bytes = {254, 254, 254, 254, 254};
-		int[] output = DataEncoding.addInformations(bytes);
+		int[] data = {34, 13, 52, 2, 9, 201, 10, 0, 59, 100};
+		int[] output = DataEncoding.fillSequence(data, 19);
 		
 		for (int i = 0; i < output.length; i++) {
 			System.out.print(output[i]);

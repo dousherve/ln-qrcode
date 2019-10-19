@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c153a1d-d7db-49c1-81ab-97e6e44c19d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/qrcode/Util.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QRCode.iml" beforeDir="false" afterPath="$PROJECT_DIR$/QRCode.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/qrcode/DataEncoding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/DataEncoding.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/qrcode/Debug.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/qrcode/Debug.java" afterDir="false" />
     </list>
@@ -94,7 +89,7 @@
       <updated>1571494631598</updated>
       <workItem from="1571494637922" duration="248000" />
       <workItem from="1571496806817" duration="103000" />
-      <workItem from="1571496942684" duration="6572000" />
+      <workItem from="1571496942684" duration="8184000" />
     </task>
     <task id="LOCAL-00001" summary="Updated .gitignore">
       <created>1571497798471</created>
@@ -103,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571497798472</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Imported JUnit5.4, implemented 'encodeString' and 'addInformations'">
+      <created>1571505980405</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1571505980405</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,6 +126,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated .gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated .gitignore" />
+    <MESSAGE value="Imported JUnit5.4, implemented 'encodeString' and 'addInformations'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Imported JUnit5.4, implemented 'encodeString' and 'addInformations'" />
   </component>
 </project>

@@ -35,7 +35,7 @@ public final class DataEncoding {
 		final int ENCODED_LENGTH = Math.min(tabByte.length, maxLength);
 		int[] encoded = new int[ENCODED_LENGTH];
 		
-		for (int i = 0; i < ENCODED_LENGTH; i++) {
+		for (int i = 0; i < ENCODED_LENGTH; ++i) {
 			encoded[i] = toInt(tabByte[i]);
 		}
 		
@@ -43,14 +43,14 @@ public final class DataEncoding {
 	}
 
 	/**
-	 * Add the 12 bits information data and concatenate the bytes to it
+	 * Add the 16 bits information data and concatenate the bytes to it
 	 * 
 	 * @param inputBytes
 	 *            the data byte sequence
 	 * @return The input bytes with an header giving the type and size of the data
 	 */
 	public static int[] addInformations(int[] inputBytes) {
-		
+	 
 		final int BYTE_MODE_FLAG = 0b0100 << 4;
 		final int INPUT_BYTES_LENGTH = inputBytes.length;
 		
@@ -62,7 +62,7 @@ public final class DataEncoding {
 		// Second byte
 		data[1] = ((INPUT_BYTES_LENGTH & 0x0F) << 4) | ((inputBytes[0] & 0xF0) >> 4);
 		// Fill the data from the third byte to the (DATA_LENGTH - 1)-th byte
-        for (int i = 2; i < DATA_LENGTH - 1; i++) {
+        for (int i = 2; i < DATA_LENGTH - 1; ++i) {
             data[i] = ((inputBytes[i - 2] & 0x0F) << 4) | ((inputBytes[i - 1] & 0xF0) >> 4);
         }
         // Fill the last byte and shift left to add the '0000' end sequence
@@ -83,8 +83,22 @@ public final class DataEncoding {
 	 *         bytes 236,17
 	 */
 	public static int[] fillSequence(int[] encodedData, int finalLength) {
-		// TODO Implementer
-		return null;
+		
+	    final int ENCODED_LENGTH = encodedData.length;
+	    
+	    if (finalLength <= ENCODED_LENGTH) {
+	        return encodedData;
+        }
+	    
+	    int[] paddedData = new int[finalLength];
+	    System.arraycopy(encodedData, 0, paddedData, 0, ENCODED_LENGTH);
+	    
+        for (int i = 0; i < finalLength - ENCODED_LENGTH; ++i) {
+            int index = i + ENCODED_LENGTH;
+            paddedData[index] = i % 2 == 0 ? 236 : 17;
+        }
+	    
+		return paddedData;
 	}
 
 	/**
