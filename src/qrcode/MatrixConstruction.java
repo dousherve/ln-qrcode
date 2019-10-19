@@ -9,14 +9,124 @@ public class MatrixConstruction {
 	 * 
 	 * B = Black integer for ARGB
 	 * 
-	 * both needs to have their alpha component to 255
+	 * both need their alpha component set to 255
 	 */
-	// TODO add constant for White pixel
-	// TODO add constant for Black pixel
 	
+	public static final int B = 0xFF_00_00_00;
+	public static final int W = 0xFF_FF_FF_FF;
 
 	// ...  MYDEBUGCOLOR = ...;
 	// feel free to add your own colors for debugging purposes
+	
+	/**
+	 * Add a certain pattern to the matrix.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param pattern
+	 * The pattern to add (see enum Patttern)
+	 * @param x
+	 * x-coordinate of the starting point of the pattern
+	 * @param y
+	 * y-coordinate of the starting point of the pattern
+	 */
+	public static void addPattern(int[][] matrix, Pattern pattern, int x, int y) {
+		
+		switch (pattern) {
+			case FINDER:
+				for (int i = 0; i < 7; ++i) {
+					for (int j = 0; j < 7; ++j) {
+						
+						if (i == 0 || i == 6 || j == 0 || j == 6) {
+							// Outer square (black)
+							matrix[i + x][j + y] = B;
+						} else if (i >= 2 && i <= 4 && j >= 2 && j <= 4) {
+							// Inner square (black)
+							matrix[i + x][j + y] = B;
+						} else {
+							// White otherwise
+							matrix[i + x][j + y] = W;
+						}
+						
+					}
+				}
+				break;
+				
+			case ALIGNMENT:
+				for (int i = 0; i < 5; ++i) {
+					for (int j = 0; j < 5; ++j) {
+						
+						final boolean IS_CENTER = (i == 2 && j == 2);
+						if (i == 0 || i == 4 || j == 0 || j == 4 || IS_CENTER) {
+							matrix[i + x][j + y] = B;
+						} else {
+							matrix[i + x][j + y] = W;
+						}
+						
+					}
+				}
+				break;
+			case TIMING:
+				for (int i = 8; i < matrix.length - 8; ++i) {
+					matrix[i][6] = (i % 2 == 0) ? B : W;
+				}
+				
+				for (int i = 8; i < matrix.length - 8; ++i) {
+					matrix[6][i] = (i % 2 == 0) ? B : W;
+				}
+				break;
+				
+			default:
+				break;
+		}
+		
+	}
+	
+	/**
+	 * Add a certain pattern to the matrix.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param pattern
+	 * The pattern to add
+	 * @param coord
+	 * The coordinate on both axes of the starting point of the pattern
+	 */
+	public static void addPattern(int[][] matrix, Pattern pattern, int coord) {
+		addPattern(matrix, pattern, coord, coord);
+	}
+	
+	/**
+	 * Add a horizontal separator for the Finder patterns.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param x
+	 * x-coordinate of the starting point of the separator
+	 * @param y
+	 * y-coordinate of the starting point of the separator
+	 */
+	public static void addHorizontalSeparator(int[][] matrix, int x, int y) {
+		for (int i = 0; i < 8; ++i) {
+			matrix[x + i][y] = W;
+		}
+	}
+	
+	/**
+	 * Add a vertical separator for the Finder patterns.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param x
+	 * x-coordinate of the starting point of the separator
+	 * @param y
+	 * y-coordinate of the starting point of the separator
+	 */
+	public static void addVerticalSeparator(int[][] matrix, int x, int y) {
+		for (int i = 0; i < 8; ++i) {
+			matrix[x][y + i] = W;
+		}
+	}
 
 	/**
 	 * Create the matrix of a QR code with the given data.
@@ -66,9 +176,12 @@ public class MatrixConstruction {
 	 *         initialized. The modules where the data should be remain empty.
 	 */
 	public static int[][] constructMatrix(int version, int mask) {
-		// TODO Implementer
-		return null;
-
+		int[][] matrix = initializeMatrix(version);
+		addFinderPatterns(matrix);
+		addAlignmentPatterns(matrix, version);
+		addTimingPatterns(matrix);
+		
+		return matrix;
 	}
 
 	/**
@@ -81,8 +194,17 @@ public class MatrixConstruction {
 	 * @return an empty matrix
 	 */
 	public static int[][] initializeMatrix(int version) {
-		// TODO Implementer
-		return null;
+		
+		final int SIZE = QRCodeInfos.getMatrixSize(version);
+		int[][] matrix = new int[SIZE][SIZE];
+		
+		for (int i = 0; i < SIZE; ++i) {
+			for (int j = 0; j < SIZE; ++j) {
+				matrix[i][j] = 0;
+			}
+		}
+		
+		return matrix;
 	}
 
 	/**
@@ -92,7 +214,25 @@ public class MatrixConstruction {
 	 *            the 2D array to modify: where to add the patterns
 	 */
 	public static void addFinderPatterns(int[][] matrix) {
-		// TODO Implementer
+		
+		final int PATTERN_SIZE = 7;
+		final int PATTERN_OFFSET = matrix.length - 7;
+		final int SEPARATOR_OFFSET = matrix.length - 8;
+		
+		// Top Left
+		addPattern(matrix, Pattern.FINDER, 0);
+		addHorizontalSeparator(matrix, 0, PATTERN_SIZE);
+		addVerticalSeparator(matrix, PATTERN_SIZE, 0);
+		
+		// Bottom Left
+		addPattern(matrix, Pattern.FINDER, 0, PATTERN_OFFSET);
+		addHorizontalSeparator(matrix, 0, SEPARATOR_OFFSET);
+		addVerticalSeparator(matrix, PATTERN_SIZE, SEPARATOR_OFFSET);
+		
+		// Top Right
+		addPattern(matrix, Pattern.FINDER, PATTERN_OFFSET, 0);
+		addHorizontalSeparator(matrix, SEPARATOR_OFFSET, PATTERN_SIZE);
+		addVerticalSeparator(matrix, SEPARATOR_OFFSET, 0);
 	}
 
 	/**
@@ -105,7 +245,12 @@ public class MatrixConstruction {
 	 *            included
 	 */
 	public static void addAlignmentPatterns(int[][] matrix, int version) {
-		// TODO Implementer
+		
+		if (version > 1) {
+			final int START_COORD = matrix.length - 9;
+			addPattern(matrix, Pattern.ALIGNMENT, START_COORD);
+		}
+		
 	}
 
 	/**
@@ -115,7 +260,7 @@ public class MatrixConstruction {
 	 *            The 2D array to modify
 	 */
 	public static void addTimingPatterns(int[][] matrix) {
-		// TODO Implementer
+		addPattern(matrix, Pattern.TIMING, 0);
 	}
 
 	/**

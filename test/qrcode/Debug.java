@@ -35,7 +35,7 @@ public class Debug {
 		
 		//test2.testAddDataInformation();
 		
-		int[] data = {170, 15};
+		/*int[] data = {170, 15};
 		boolean[] output = DataEncoding.bytesToBinaryArray(data);
 		
 		for (int i = 0; i < output.length; i++) {
@@ -45,7 +45,7 @@ public class Debug {
 			} else {
 				System.out.print('\n');
 			}
-		}
+		}*/
 		
 	}
 
