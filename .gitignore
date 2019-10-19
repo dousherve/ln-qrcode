@@ -25,3 +25,4 @@ hs_err_pid*
 # Custom
 .DS_Store
 qrcode.pdf
+notes.txt
