@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c153a1d-d7db-49c1-81ab-97e6e44c19d2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/qrcode/Direction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/qrcode/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/qrcode/MatrixConstruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/MatrixConstruction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/qrcode/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/Util.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,11 +43,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.124378085" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -114,9 +119,25 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MatrixConstructionTest02" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="QRCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="qrcode.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="qrcode" />
+      <option name="MAIN_CLASS_NAME" value="qrcode.MatrixConstructionTest02" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.MatrixConstructionTest02" />
         <item itemvalue="JUnit.MatrixConstructionTest01" />
         <item itemvalue="Application.Debug" />
         <item itemvalue="JUnit.DataEncodingTest" />
@@ -137,6 +158,8 @@
       <workItem from="1571496806817" duration="103000" />
       <workItem from="1571496942684" duration="20613000" />
       <workItem from="1571561349760" duration="8476000" />
+      <workItem from="1571596485620" duration="80000" />
+      <workItem from="1571602024076" duration="8395000" />
     </task>
     <task id="LOCAL-00001" summary="Updated .gitignore">
       <created>1571497798471</created>

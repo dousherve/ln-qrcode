@@ -1,6 +1,6 @@
 package qrcode;
 
-import static qrcode.Util.booleanToColor;
+import static qrcode.Util.*;
 
 public class MatrixConstruction {
 
@@ -16,11 +16,6 @@ public class MatrixConstruction {
 	
 	public static final int B = 0xFF_00_00_00;
 	public static final int W = 0xFF_FF_FF_FF;
-	
-	// BLUE DEBUG COLOR
-	public static final int RED = 0xFF_FF_00_00;	// Was WHITE -> masked
-	public static final int GREEN = 0xFF_00_FF_00;	// Not masked
-	public static final int BLUE = 0xFF_00_00_FF;	// Was BLACK -> masked
 	
 	/**
 	 * Add a certain pattern to the matrix.
@@ -258,12 +253,16 @@ public class MatrixConstruction {
 	 *            The 2D array to modify
 	 */
 	public static void addTimingPatterns(int[][] matrix) {
+		// Horizontal line on the 6th row
+		// Starts at 8th column, ends 8 cols before the end
 		for (int i = 8; i < matrix.length - 8; ++i) {
 			matrix[i][6] = (i % 2 == 0) ? B : W;
 		}
 		
-		for (int i = 8; i < matrix.length - 8; ++i) {
-			matrix[6][i] = (i % 2 == 0) ? B : W;
+		// Vertical line on the 6th column
+		// Starts at 8th row, ends 8 rows before the end
+		for (int j = 8; j < matrix.length - 8; ++j) {
+			matrix[6][j] = (j % 2 == 0) ? B : W;
 		}
 	}
 
@@ -337,7 +336,7 @@ public class MatrixConstruction {
 	public static int maskColor(int col, int row, boolean dataBit, int masking) {
 		
 		final int NOT_MASKED_COLOR = booleanToColor(dataBit);
-		final int MASKED_COLOR = dataBit ? BLUE : NOT_MASKED_COLOR;
+		final int MASKED_COLOR = booleanToColor(!dataBit);
 		
 		final int CONDITION_PART_5_6 = ((col * row) % 2) + ((col * row) % 3);
 		
@@ -399,6 +398,90 @@ public class MatrixConstruction {
 		
 		return NOT_MASKED_COLOR;
 	}
+    
+    /**
+     * Write a bit at [col][row].
+     *
+     * @param matrix
+     * The matrix to write in.
+     * @param col
+     * @param row
+     * @param bit
+     * @param mask
+     * The number of the mask to apply to the bit
+     */
+    public static void writeBit(int[][] matrix, int col, int row, boolean bit, int mask) {
+        matrix[col][row] = maskColor(col, row, bit, mask);
+    }
+	
+	/**
+	 * Fill a row of a 2-module column, and keep track of the data index.
+	 *
+	 * @param matrix
+	 * @param data
+	 * @param mask
+	 * @param dataIndex
+	 * @param col
+	 * @param row
+	 * @return The new data index
+	 */
+	public static int fillModuleRow(int[][] matrix, boolean[] data, int mask, int dataIndex, int col, int row) {
+		
+		final int RIGHT = matrix[col][row];
+		final int LEFT = matrix[col - 1][row];
+		
+		if (isWritable(RIGHT)) {
+			if (dataIndex < data.length) {
+				writeBit(matrix, col, row, data[dataIndex], mask);
+				dataIndex++;
+			} else {
+				writeBit(matrix, col, row, false, mask);
+			}
+		}
+		
+		if (isWritable(LEFT)) {
+			if (dataIndex < data.length) {
+				writeBit(matrix, col - 1, row, data[dataIndex], mask);
+				dataIndex++;
+			} else {
+				writeBit(matrix, col - 1, row, false, mask);
+			}
+		}
+		
+		return dataIndex;
+	}
+	
+	/**
+	 * Fill a whole 2-module column
+	 *
+	 * @param matrix
+	 * @param data
+	 * @param mask
+	 * @param dataIndex
+	 * @param dir
+	 * @param MATRIX_COL
+	 * @return
+	 */
+	public static int fillModuleColumn(int[][] matrix, boolean[] data, int mask, int dataIndex, Direction dir, int MATRIX_COL) {
+		final int LAST_INDEX = matrix.length - 1;
+		
+		if (dir == Direction.UP) {
+			// i represents the line index relative to the matrix
+			for (int i = LAST_INDEX; i >= 0; --i) {
+				// Fill the row and update the dataIndex
+				dataIndex = fillModuleRow(matrix, data, mask, dataIndex, MATRIX_COL, i);
+			}
+			
+		} else {
+			// i represents the line index relative to the matrix
+			for (int i = 0; i < matrix.length; ++i) {
+				// Fill the row and update the dataIndex
+				dataIndex = fillModuleRow(matrix, data, mask, dataIndex, MATRIX_COL, i);
+			}
+			
+		}
+		return dataIndex;
+	}
 
 	/**
 	 * Add the data bits into the QR code matrix
@@ -409,10 +492,43 @@ public class MatrixConstruction {
 	 *            the data to add
 	 */
 	public static void addDataInformation(int[][] matrix, boolean[] data, int mask) {
-		// TODO Implementer
-
+		
+		// Filling the path to the right of the Timing Pattern
+		// Up and Down, Right to Left, always right module and then left module
+		// Here, we refer to 'col' as the index of the current 2-module large column
+		// 0 being the closest column to the Timing Pattern.
+		
+		// The last column index of the right path
+		// The count of the columns minus one for the vertical timing pattern column
+		// Divided by two because the columns are 2-module large
+		// Minus three for the first 3 columns of the left path
+		final int LAST_INDEX = matrix.length - 1;
+		final int MODULE_COLUMNS_COUNT = LAST_INDEX / 2;
+		final int RIGHT_COLUMNS_COUNT = MODULE_COLUMNS_COUNT - 3;
+		
+		int dataIndex = 0;
+		
+		for (int col = RIGHT_COLUMNS_COUNT - 1; col >= 0; --col) {
+			Direction dir = (col % 2 == 0) ? Direction.UP : Direction.DOWN;
+			
+			// The index of the right column of the 2-module column relative to 'matrix'
+			final int MATRIX_COL = (col + 3) * 2 + 2;
+			
+			dataIndex = fillModuleColumn(matrix, data, mask, dataIndex, dir, MATRIX_COL);
+		}
+		
+		// Filling the path to the left of the Timing Pattern
+		for (int col = 2; col >= 0; --col) {
+			// Invert the direction condition, because we skipped a 'single' column
+			Direction dir = (col % 2 == 0) ? Direction.DOWN : Direction.UP;
+			
+			// The index of the right column of the 2-module column relative to 'matrix'
+			final int MATRIX_COL = col * 2 + 1;
+			
+			dataIndex = fillModuleColumn(matrix, data, mask, dataIndex, dir, MATRIX_COL);
+		}
 	}
-
+	
 	/*
 	 * =======================================================================
 	 * 

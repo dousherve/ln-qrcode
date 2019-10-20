@@ -2,15 +2,14 @@ package qrcode;
 
 public class Main {
 
-	//public static final String INPUT =  "Write you message here. Accents are permitted, but not all characters. See the norm ISO/CEI 8859-1 on wikipedia for more info";
-	public static final String INPUT =  "Hello, World!";
+	public static final String INPUT =  "EPFL is <3";
 
 	/*
 	 * Parameters
 	 */
 	public static final int VERSION = 2;
-	public static final int MASK = 0;
-	public static final int SCALING = 20;
+	public static final int MASK = 5;
+	public static final int SCALING = 40;
 
 	public static void main(String[] args) {
 
@@ -22,7 +21,7 @@ public class Main {
 		/*
 		 * image
 		 */
-		int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(VERSION, encodedData,MASK);
+		int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(VERSION, encodedData, MASK);
 
 		/*
 		 * Visualization
