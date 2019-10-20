@@ -1,5 +1,7 @@
 package qrcode;
 
+import static qrcode.Util.booleanToColor;
+
 public class MatrixConstruction {
 
 	/*
@@ -66,16 +68,6 @@ public class MatrixConstruction {
 					}
 				}
 				break;
-			case TIMING:
-				for (int i = 8; i < matrix.length - 8; ++i) {
-					matrix[i][6] = (i % 2 == 0) ? B : W;
-				}
-				
-				for (int i = 8; i < matrix.length - 8; ++i) {
-					matrix[6][i] = (i % 2 == 0) ? B : W;
-				}
-				break;
-				
 			default:
 				break;
 		}
@@ -182,6 +174,8 @@ public class MatrixConstruction {
 		addFinderPatterns(matrix);
 		addAlignmentPatterns(matrix, version);
 		addTimingPatterns(matrix);
+		addDarkModule(matrix);
+		addFormatInformation(matrix, mask);
 		
 		return matrix;
 	}
@@ -262,7 +256,13 @@ public class MatrixConstruction {
 	 *            The 2D array to modify
 	 */
 	public static void addTimingPatterns(int[][] matrix) {
-		addPattern(matrix, Pattern.TIMING, 0);
+		for (int i = 8; i < matrix.length - 8; ++i) {
+			matrix[i][6] = (i % 2 == 0) ? B : W;
+		}
+		
+		for (int i = 8; i < matrix.length - 8; ++i) {
+			matrix[6][i] = (i % 2 == 0) ? B : W;
+		}
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class MatrixConstruction {
 	 *            the 2-dimensional array representing the QR code
 	 */
 	public static void addDarkModule(int[][] matrix) {
-		// TODO Implementer
+		matrix[8][matrix.length - 8] = B;
 	}
 
 	/**
@@ -284,7 +284,33 @@ public class MatrixConstruction {
 	 *            the mask id
 	 */
 	public static void addFormatInformation(int[][] matrix, int mask) {
-		// TODO Implementer
+		
+		boolean[] formatSequence = QRCodeInfos.getFormatSequence(mask);
+		
+		for (int i = 0; i < 6; ++i) {
+			// Fill the bottom of the top left Finder Pattern
+			matrix[i][8] = booleanToColor(formatSequence[i]);
+		}
+		for (int i = 14; i > 8; --i) {
+			// Fill the right side of the top left Finder Pattern
+			matrix[8][14 - i] = booleanToColor(formatSequence[i]);
+		}
+		// Fill the missing modules arround the bottom right corner of
+		// the top left Finder Pattern
+		matrix[7][8] = booleanToColor(formatSequence[6]);
+		matrix[8][8] = booleanToColor(formatSequence[7]);
+		matrix[8][7] = booleanToColor(formatSequence[8]);
+		
+		for (int i = 7; i < 15; ++i) {
+			// Fill the bottom of the top right Finder Pattern
+			final int OFFSET = matrix.length - 8;
+			matrix[i - 7 + OFFSET][8] = booleanToColor(formatSequence[i]);
+		}
+		for (int i = 0; i < 7; ++i) {
+			// Fill the right side of the bottom left Finder Pattern
+			final int OFFSET = matrix.length - 1;
+			matrix[8][OFFSET - i] = booleanToColor(formatSequence[i]);
+		}
 	}
 
 	/*
@@ -300,8 +326,10 @@ public class MatrixConstruction {
 	 *            x-coordinate
 	 * @param row
 	 *            y-coordinate
-	 * @param color
-	 *            : initial color without masking
+	 * @param dataBit
+	 *            The bit of data
+	 * @param masking
+	 * 			  The masking value
 	 * @return the color with the masking
 	 */
 	public static int maskColor(int col, int row, boolean dataBit, int masking) {

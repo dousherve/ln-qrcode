@@ -2,6 +2,6 @@ package qrcode;
 
 public enum Pattern {
 
-    FINDER, ALIGNMENT, TIMING
+    FINDER, ALIGNMENT
     
 }

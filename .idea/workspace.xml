@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7c153a1d-d7db-49c1-81ab-97e6e44c19d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/qrcode/Pattern.java" afterDir="false" />
+    <list default="true" id="7c153a1d-d7db-49c1-81ab-97e6e44c19d2" name="Default Changelist" comment="- Updated Main.java to match the examples&#10;- Refactored Timing Patterns : 'TIMING' removed from the Pattern enum and the general 'addPattern' method; now taken care of in its own method 'addTimingPatterns'&#10;- Implemented 'addDarkModule'&#10;- Implemented 'addFormatInformation'&#10;- Updated 'constructMatrix'&#10;- QR Code now rendering as in fig. 6b of the specification&#10;- At this point, all required tests pass ✅">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/qrcode/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/qrcode/MatrixConstruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/MatrixConstruction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/qrcode/Debug.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/qrcode/Debug.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/qrcode/Pattern.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/Pattern.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/qrcode/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/qrcode/Util.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,7 +60,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.MatrixConstructionTest01">
     <configuration name="Debug" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="qrcode.Debug" />
       <module name="QRCode" />
@@ -102,11 +102,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MatrixConstructionTest01" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="QRCode" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="qrcode.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="qrcode" />
+      <option name="MAIN_CLASS_NAME" value="qrcode.MatrixConstructionTest01" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MatrixConstructionTest01" />
+        <item itemvalue="Application.Debug" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.DataEncodingTest" />
-        <item itemvalue="Application.Debug" />
       </list>
     </recent_temporary>
   </component>
@@ -122,7 +138,8 @@
       <updated>1571494631598</updated>
       <workItem from="1571494637922" duration="248000" />
       <workItem from="1571496806817" duration="103000" />
-      <workItem from="1571496942684" duration="20423000" />
+      <workItem from="1571496942684" duration="20613000" />
+      <workItem from="1571561349760" duration="4875000" />
     </task>
     <task id="LOCAL-00001" summary="Updated .gitignore">
       <created>1571497798471</created>
@@ -152,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571521122102</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Initialized matrix construction, implemented all patterns">
+      <created>1571527529393</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1571527529393</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,6 +200,8 @@
     <MESSAGE value="Imported JUnit5.4, implemented 'encodeString' and 'addInformations'" />
     <MESSAGE value="Implemented 'fillSequence'" />
     <MESSAGE value="Corrected 'addInformations', added comments in various methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrected 'addInformations', added comments in various methods" />
+    <MESSAGE value="Initialized matrix construction, implemented all patterns" />
+    <MESSAGE value="- Updated Main.java to match the examples&#10;- Refactored Timing Patterns : 'TIMING' removed from the Pattern enum and the general 'addPattern' method; now taken care of in its own method 'addTimingPatterns'&#10;- Implemented 'addDarkModule'&#10;- Implemented 'addFormatInformation'&#10;- Updated 'constructMatrix'&#10;- QR Code now rendering as in fig. 6b of the specification&#10;- At this point, all required tests pass ✅" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Updated Main.java to match the examples&#10;- Refactored Timing Patterns : 'TIMING' removed from the Pattern enum and the general 'addPattern' method; now taken care of in its own method 'addTimingPatterns'&#10;- Implemented 'addDarkModule'&#10;- Implemented 'addFormatInformation'&#10;- Updated 'constructMatrix'&#10;- QR Code now rendering as in fig. 6b of the specification&#10;- At this point, all required tests pass ✅" />
   </component>
 </project>
