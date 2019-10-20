@@ -16,9 +16,11 @@ public class MatrixConstruction {
 	
 	public static final int B = 0xFF_00_00_00;
 	public static final int W = 0xFF_FF_FF_FF;
-
-	// ...  MYDEBUGCOLOR = ...;
-	// feel free to add your own colors for debugging purposes
+	
+	// BLUE DEBUG COLOR
+	public static final int RED = 0xFF_FF_00_00;	// Was WHITE -> masked
+	public static final int GREEN = 0xFF_00_FF_00;	// Not masked
+	public static final int BLUE = 0xFF_00_00_FF;	// Was BLACK -> masked
 	
 	/**
 	 * Add a certain pattern to the matrix.
@@ -327,14 +329,75 @@ public class MatrixConstruction {
 	 * @param row
 	 *            y-coordinate
 	 * @param dataBit
-	 *            The bit of data
+	 *            The data bit
 	 * @param masking
 	 * 			  The masking value
-	 * @return the color with the masking
+	 * @return The color with the maskingh
 	 */
 	public static int maskColor(int col, int row, boolean dataBit, int masking) {
-		// TODO Implementer
-		return 0;
+		
+		final int NOT_MASKED_COLOR = booleanToColor(dataBit);
+		final int MASKED_COLOR = dataBit ? BLUE : NOT_MASKED_COLOR;
+		
+		final int CONDITION_PART_5_6 = ((col * row) % 2) + ((col * row) % 3);
+		
+		switch (masking) {
+			case 0:
+				if ((col + row) % 2 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+				
+			case 1:
+				if (row % 2 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+			
+			case 2:
+				if (col % 3 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+			
+			case 3:
+				if ((col + row) % 3 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+				
+			case 4:
+				final int FLOORED_A = (int) Math.floor(row / 2.0);
+				final int FLOORED_B = (int) Math.floor(col / 3.0);
+				
+				if ((FLOORED_A + FLOORED_B) % 2 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+				
+			case 5:
+				if (CONDITION_PART_5_6 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+				
+			case 6:
+				if (CONDITION_PART_5_6 % 2 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+				
+			case 7:
+				if ((((col + row) % 2) + ((col * row) % 3)) % 2 == 0) {
+					return MASKED_COLOR;
+				}
+				break;
+				
+			default:
+				return NOT_MASKED_COLOR;
+		}
+		
+		return NOT_MASKED_COLOR;
 	}
 
 	/**
