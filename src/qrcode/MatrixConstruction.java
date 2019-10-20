@@ -459,27 +459,28 @@ public class MatrixConstruction {
 	 * @param mask
 	 * @param dataIndex
 	 * @param dir
-	 * @param MATRIX_COL
+	 * @param col
 	 * @return
 	 */
-	public static int fillModuleColumn(int[][] matrix, boolean[] data, int mask, int dataIndex, Direction dir, int MATRIX_COL) {
+	public static int fillModuleColumn(int[][] matrix, boolean[] data, int mask, int dataIndex, Direction dir, int col) {
+	 
 		final int LAST_INDEX = matrix.length - 1;
 		
 		if (dir == Direction.UP) {
 			// i represents the line index relative to the matrix
 			for (int i = LAST_INDEX; i >= 0; --i) {
 				// Fill the row and update the dataIndex
-				dataIndex = fillModuleRow(matrix, data, mask, dataIndex, MATRIX_COL, i);
+				dataIndex = fillModuleRow(matrix, data, mask, dataIndex, col, i);
 			}
 			
 		} else {
-			// i represents the line index relative to the matrix
+		    // DOWN direction
 			for (int i = 0; i < matrix.length; ++i) {
-				// Fill the row and update the dataIndex
-				dataIndex = fillModuleRow(matrix, data, mask, dataIndex, MATRIX_COL, i);
+				dataIndex = fillModuleRow(matrix, data, mask, dataIndex, col, i);
 			}
 			
 		}
+		
 		return dataIndex;
 	}
 
@@ -492,39 +493,32 @@ public class MatrixConstruction {
 	 *            the data to add
 	 */
 	public static void addDataInformation(int[][] matrix, boolean[] data, int mask) {
-		
-		// Filling the path to the right of the Timing Pattern
+	 
 		// Up and Down, Right to Left, always right module and then left module
-		// Here, we refer to 'col' as the index of the current 2-module large column
+		// Here, we refer to 'col' as the index of the current 2-module column
 		// 0 being the closest column to the Timing Pattern.
-		
-		// The last column index of the right path
-		// The count of the columns minus one for the vertical timing pattern column
-		// Divided by two because the columns are 2-module large
-		// Minus three for the first 3 columns of the left path
+  
 		final int LAST_INDEX = matrix.length - 1;
 		final int MODULE_COLUMNS_COUNT = LAST_INDEX / 2;
 		final int RIGHT_COLUMNS_COUNT = MODULE_COLUMNS_COUNT - 3;
 		
 		int dataIndex = 0;
-		
+        
+        // Filling the path to the right of the Timing Pattern
 		for (int col = RIGHT_COLUMNS_COUNT - 1; col >= 0; --col) {
 			Direction dir = (col % 2 == 0) ? Direction.UP : Direction.DOWN;
 			
 			// The index of the right column of the 2-module column relative to 'matrix'
 			final int MATRIX_COL = (col + 3) * 2 + 2;
-			
 			dataIndex = fillModuleColumn(matrix, data, mask, dataIndex, dir, MATRIX_COL);
 		}
 		
-		// Filling the path to the left of the Timing Pattern
+		// Filling the path to the left of the Timing Pattern (3 remaining columns)
 		for (int col = 2; col >= 0; --col) {
-			// Invert the direction condition, because we skipped a 'single' column
+			// Invert the direction condition, because we skipped a column -> the parity changed
 			Direction dir = (col % 2 == 0) ? Direction.DOWN : Direction.UP;
 			
-			// The index of the right column of the 2-module column relative to 'matrix'
 			final int MATRIX_COL = col * 2 + 1;
-			
 			dataIndex = fillModuleColumn(matrix, data, mask, dataIndex, dir, MATRIX_COL);
 		}
 	}
