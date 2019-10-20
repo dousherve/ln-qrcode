@@ -391,9 +391,6 @@ public class MatrixConstruction {
 					return MASKED_COLOR;
 				}
 				break;
-				
-			default:
-				return NOT_MASKED_COLOR;
 		}
 		
 		return NOT_MASKED_COLOR;
