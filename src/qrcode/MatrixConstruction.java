@@ -176,7 +176,9 @@ public class MatrixConstruction {
 	 *         initialized. The modules where the data should be remain empty.
 	 */
 	public static int[][] constructMatrix(int version, int mask) {
+	
 		int[][] matrix = initializeMatrix(version);
+		
 		addFinderPatterns(matrix);
 		addAlignmentPatterns(matrix, version);
 		addTimingPatterns(matrix);
