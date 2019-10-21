@@ -16,106 +16,6 @@ public class MatrixConstruction {
 	
 	public static final int B = 0xFF_00_00_00;
 	public static final int W = 0xFF_FF_FF_FF;
-	
-	/**
-	 * Add a certain pattern to the matrix.
-	 *
-	 * @param matrix
-	 * The matrix on which the modifications will be made
-	 * @param pattern
-	 * The pattern to add (see enum Patttern)
-	 * @param x
-	 * x-coordinate of the starting point of the pattern
-	 * @param y
-	 * y-coordinate of the starting point of the pattern
-	 */
-	public static void addPattern(int[][] matrix, Pattern pattern, int x, int y) {
-		
-		switch (pattern) {
-			case FINDER:
-				for (int i = 0; i < 7; ++i) {
-					for (int j = 0; j < 7; ++j) {
-						
-						if (i == 0 || i == 6 || j == 0 || j == 6) {
-							// Outer square (black)
-							matrix[i + x][j + y] = B;
-						} else if (i >= 2 && i <= 4 && j >= 2 && j <= 4) {
-							// Inner square (black)
-							matrix[i + x][j + y] = B;
-						} else {
-							// White otherwise
-							matrix[i + x][j + y] = W;
-						}
-						
-					}
-				}
-				break;
-				
-			case ALIGNMENT:
-				for (int i = 0; i < 5; ++i) {
-					for (int j = 0; j < 5; ++j) {
-						
-						final boolean IS_CENTER = (i == 2 && j == 2);
-						if (i == 0 || i == 4 || j == 0 || j == 4 || IS_CENTER) {
-							matrix[i + x][j + y] = B;
-						} else {
-							matrix[i + x][j + y] = W;
-						}
-						
-					}
-				}
-				break;
-			default:
-				break;
-		}
-		
-	}
-	
-	/**
-	 * Add a certain pattern to the matrix.
-	 *
-	 * @param matrix
-	 * The matrix on which the modifications will be made
-	 * @param pattern
-	 * The pattern to add
-	 * @param coord
-	 * The coordinate on both axes of the starting point of the pattern
-	 */
-	public static void addPattern(int[][] matrix, Pattern pattern, int coord) {
-		addPattern(matrix, pattern, coord, coord);
-	}
-	
-	/**
-	 * Add a horizontal separator for the Finder patterns.
-	 *
-	 * @param matrix
-	 * The matrix on which the modifications will be made
-	 * @param x
-	 * x-coordinate of the starting point of the separator
-	 * @param y
-	 * y-coordinate of the starting point of the separator
-	 */
-	public static void addHorizontalSeparator(int[][] matrix, int x, int y) {
-		for (int i = 0; i < 8; ++i) {
-			matrix[x + i][y] = W;
-		}
-	}
-	
-	/**
-	 * Add a vertical separator for the Finder patterns.
-	 *
-	 * @param matrix
-	 * The matrix on which the modifications will be made
-	 * @param x
-	 * x-coordinate of the starting point of the separator
-	 * @param y
-	 * y-coordinate of the starting point of the separator
-	 */
-	public static void addVerticalSeparator(int[][] matrix, int x, int y) {
-		for (int i = 0; i < 8; ++i) {
-			matrix[x][y + i] = W;
-		}
-	}
 
 	/**
 	 * Create the matrix of a QR code with the given data.
@@ -199,6 +99,109 @@ public class MatrixConstruction {
 		
 		return matrix;
 	}
+	
+	/**
+	 * Add a certain pattern to the matrix.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param pattern
+	 * The pattern to add (see enum Pattern)
+	 * @param x
+	 * x-coordinate of the starting point of the pattern
+	 * @param y
+	 * y-coordinate of the starting point of the pattern
+	 */
+	public static void addPattern(int[][] matrix, Pattern pattern, int x, int y) {
+		
+		switch (pattern) {
+			case FINDER:
+				for (int i = 0; i < 7; ++i) {
+					for (int j = 0; j < 7; ++j) {
+						final int X = i + x;
+						final int Y = j + y;
+						
+						if (i == 0 || i == 6 || j == 0 || j == 6) {
+							// Outer square (black)
+							matrix[X][Y] = B;
+						} else if (i >= 2 && i <= 4 && j >= 2 && j <= 4) {
+							// Inner square (black)
+							matrix[X][Y] = B;
+						} else {
+							// White otherwise
+							matrix[X][Y] = W;
+						}
+					}
+				}
+				break;
+			
+			case ALIGNMENT:
+				for (int i = 0; i < 5; ++i) {
+					for (int j = 0; j < 5; ++j) {
+						final int X = i + x;
+						final int Y = j + y;
+						
+						final boolean IS_CENTER = (i == 2 && j == 2);
+						if (i == 0 || i == 4 || j == 0 || j == 4 || IS_CENTER) {
+							matrix[X][Y] = B;
+						} else {
+							matrix[X][Y] = W;
+						}
+					}
+				}
+				break;
+				
+			default:
+				break;
+		}
+		
+	}
+	
+	/**
+	 * Add a certain pattern to the matrix.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param pattern
+	 * The pattern to add
+	 * @param coord
+	 * The coordinate on both axes of the starting point of the pattern
+	 */
+	public static void addPattern(int[][] matrix, Pattern pattern, int coord) {
+		addPattern(matrix, pattern, coord, coord);
+	}
+	
+	/**
+	 * Add a horizontal separator for the Finder patterns.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param x
+	 * x-coordinate of the starting point of the separator
+	 * @param y
+	 * y-coordinate of the starting point of the separator
+	 */
+	public static void addHorizontalSeparator(int[][] matrix, int x, int y) {
+		for (int i = 0; i < 8; ++i) {
+			matrix[x + i][y] = W;
+		}
+	}
+	
+	/**
+	 * Add a vertical separator for the Finder patterns.
+	 *
+	 * @param matrix
+	 * The matrix on which the modifications will be made
+	 * @param x
+	 * x-coordinate of the starting point of the separator
+	 * @param y
+	 * y-coordinate of the starting point of the separator
+	 */
+	public static void addVerticalSeparator(int[][] matrix, int x, int y) {
+		for (int i = 0; i < 8; ++i) {
+			matrix[x][y + i] = W;
+		}
+	}
 
 	/**
 	 * Add all finder patterns to the given matrix with a border of White modules.
@@ -209,8 +212,8 @@ public class MatrixConstruction {
 	public static void addFinderPatterns(int[][] matrix) {
 		
 		final int PATTERN_SIZE = 7;
-		final int PATTERN_OFFSET = matrix.length - 7;
-		final int SEPARATOR_OFFSET = matrix.length - 8;
+		final int PATTERN_OFFSET = matrix.length - PATTERN_SIZE;
+		final int SEPARATOR_OFFSET = PATTERN_OFFSET - 1;
 		
 		// Top Left
 		addPattern(matrix, Pattern.FINDER, 0);
@@ -253,15 +256,17 @@ public class MatrixConstruction {
 	 *            The 2D array to modify
 	 */
 	public static void addTimingPatterns(int[][] matrix) {
+		
+		final int STOP_INDEX = matrix.length - 8;
 		// Horizontal line on the 6th row
 		// Starts at 8th column, ends 8 cols before the end
-		for (int i = 8; i < matrix.length - 8; ++i) {
+		for (int i = 8; i < STOP_INDEX; ++i) {
 			matrix[i][6] = (i % 2 == 0) ? B : W;
 		}
 		
 		// Vertical line on the 6th column
 		// Starts at 8th row, ends 8 rows before the end
-		for (int j = 8; j < matrix.length - 8; ++j) {
+		for (int j = 8; j < STOP_INDEX; ++j) {
 			matrix[6][j] = (j % 2 == 0) ? B : W;
 		}
 	}
@@ -304,8 +309,8 @@ public class MatrixConstruction {
 		
 		for (int i = 7; i < 15; ++i) {
 			// Fill the bottom of the top right Finder Pattern
-			final int OFFSET = matrix.length - 8;
-			matrix[i - 7 + OFFSET][8] = booleanToColor(formatSequence[i]);
+			final int OFFSET = matrix.length - 8 - 7;
+			matrix[i + OFFSET][8] = booleanToColor(formatSequence[i]);
 		}
 		for (int i = 0; i < 7; ++i) {
 			// Fill the right side of the bottom left Finder Pattern
@@ -335,9 +340,7 @@ public class MatrixConstruction {
 	 */
 	public static int maskColor(int col, int row, boolean dataBit, int masking) {
 		
-		final int NOT_MASKED_COLOR = booleanToColor(dataBit);
 		final int MASKED_COLOR = booleanToColor(!dataBit);
-		
 		final int CONDITION_PART_5_6 = ((col * row) % 2) + ((col * row) % 3);
 		
 		switch (masking) {
@@ -391,9 +394,12 @@ public class MatrixConstruction {
 					return MASKED_COLOR;
 				}
 				break;
+				
+			default:
+				break;
 		}
 		
-		return NOT_MASKED_COLOR;
+		return booleanToColor(dataBit);
 	}
     
     /**
