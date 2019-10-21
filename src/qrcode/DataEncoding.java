@@ -104,8 +104,7 @@ public final class DataEncoding {
 	    System.arraycopy(encodedData, 0, paddedData, 0, ENCODED_LENGTH);
 	    
         for (int i = 0; i < finalLength - ENCODED_LENGTH; ++i) {
-            int index = i + ENCODED_LENGTH;
-            paddedData[index] = (i % 2 == 0) ? 236 : 17;
+            paddedData[i + ENCODED_LENGTH] = (i % 2 == 0) ? 236 : 17;
         }
 	    
 		return paddedData;
@@ -127,11 +126,8 @@ public final class DataEncoding {
 	    int[] dataWithCorrection = new int[ENCODED_LENGTH + eccLength];
 	    System.arraycopy(encodedData, 0, dataWithCorrection, 0, ENCODED_LENGTH);
 	    
-	    int[] correctionBytes = ErrorCorrectionEncoding.encode(encodedData, eccLength);
-        
-        for (int i = ENCODED_LENGTH; i < dataWithCorrection.length; ++i) {
-            dataWithCorrection[i] = correctionBytes[i - ENCODED_LENGTH];
-        }
+	    final int[] CORRECTION_BYTES = ErrorCorrectionEncoding.encode(encodedData, eccLength);
+        System.arraycopy(CORRECTION_BYTES, 0, dataWithCorrection, ENCODED_LENGTH, CORRECTION_BYTES.length);
 	 
 		return dataWithCorrection;
 	}
