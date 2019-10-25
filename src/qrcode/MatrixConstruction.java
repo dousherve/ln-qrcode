@@ -7,9 +7,9 @@ public class MatrixConstruction {
 	/*
 	 * Constants defining the color in ARGB format
 	 * 
-	 * W = White integer for ARGB
+	 * W = false integer for ARGB
 	 * 
-	 * B = Black integer for ARGB
+	 * B = true integer for ARGB
 	 * 
 	 * both need their alpha component set to 255
 	 */
@@ -122,13 +122,13 @@ public class MatrixConstruction {
 						final int Y = j + y;
 						
 						if (i == 0 || i == 6 || j == 0 || j == 6) {
-							// Outer square (black)
+							// Outer square (true)
 							matrix[X][Y] = B;
 						} else if (i >= 2 && i <= 4 && j >= 2 && j <= 4) {
-							// Inner square (black)
+							// Inner square (true)
 							matrix[X][Y] = B;
 						} else {
-							// White otherwise
+							// false otherwise
 							matrix[X][Y] = W;
 						}
 					}
@@ -204,7 +204,7 @@ public class MatrixConstruction {
 	}
 
 	/**
-	 * Add all finder patterns to the given matrix with a border of White modules.
+	 * Add all finder patterns to the given matrix with a border of false modules.
 	 * 
 	 * @param matrix
 	 *            the 2D array to modify: where to add the patterns
@@ -572,8 +572,33 @@ public class MatrixConstruction {
 	 * @return the penalty score obtained by the QR code, lower the better
 	 */
 	public static int evaluate(int[][] matrix) {
-		//TODO BONUS
-	
+		
+		final boolean[] PATTERN = {false, false, false, false, true, false, true, true, true, false, true};
+		
+		int penalty = 0;
+		
+		// Test all the columns to find the pattern
+		for (int i = 0; i < matrix.length; ++i) {
+			for (int j = 0; j < matrix.length; ++j) {
+				
+				boolean patternFound = false;
+				
+				for (int k = 0; k < PATTERN.length; ++k) {
+					final boolean BIT = (matrix[i][j + k] == B);
+					if (PATTERN[k] != BIT){
+						break;
+					} else if (k == PATTERN.length - 1) {
+						patternFound = true;
+					}
+				}
+				
+				if (patternFound) {
+					penalty += 40;
+				}
+				
+			}
+		}
+		
 		return 0;
 	}
 
