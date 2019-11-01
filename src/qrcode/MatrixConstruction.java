@@ -573,6 +573,15 @@ public class MatrixConstruction {
 	 */
 	public static int evaluate(int[][] matrix) {
 		
+		int penalty = 0;
+		
+		
+		
+		return penalty;
+	}
+	
+	public static int patternPenalties(int[][] matrix) {
+		
 		final boolean[] PATTERN = {false, false, false, false, true, false, true, true, true, false, true};
 		
 		int penalty = 0;
@@ -599,7 +608,73 @@ public class MatrixConstruction {
 			}
 		}
 		
-		return 0;
+		return penalty;
+	}
+	
+	private static int adjacentPenalties(int[][] matrix){
+		
+		// Count penalty of the pattern {0,0,0,...} or {1,1,1,...}
+		int penalty = 0;
+		int colorRow, countRow;
+		int colorColumn, countColumn;
+		
+		for (int i = 0; i < matrix.length; ++i) {
+			colorRow = matrix[i][0];
+			colorColumn = matrix[0][i];
+			countRow = 1;
+			countColumn = 1;
+			
+			for (int j = 1; j < matrix[i].length; ++j) {
+				if (matrix[j][i] == colorColumn){
+					++countColumn;
+				} else {
+					colorColumn = matrix[j][i];
+					if(countColumn >= 3){
+						penalty += countColumn;
+					}
+					countColumn = 0;
+				}
+				
+				
+				if (matrix[i][j] == colorRow){
+					++countRow;
+				} else {
+					colorRow = matrix[i][j];
+					if(countRow >= 3){
+						penalty += countRow;
+					}
+					countRow = 0;
+				}
+			}
+			
+			if(countRow >= 3){
+				penalty += countRow;
+			}
+			
+			if(countColumn >= 3){
+				penalty += countColumn;
+			}
+		}
+		
+		return penalty;
+	}
+	
+	public static int squarePenalties(int[][] matrix) {
+		
+		int penalty = 0;
+		//count penalty for 2x2 squares
+		for (int i = 0; i < matrix.length - 1; ++i) {
+			for (int j = 0; j < matrix.length - 1; ++j) {
+				int color = matrix[i][j];
+				
+				if((matrix[i][j + 1] == color) && (matrix[i + 1][j] == color) &&
+						(matrix[i + 1][j + 1] == color)) {
+					penalty += 3;
+				}
+			}
+		}
+		
+		return penalty;
 	}
 
 }
