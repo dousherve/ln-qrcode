@@ -575,7 +575,11 @@ public class MatrixConstruction {
 		
 		int penalty = 0;
 		
+		penalty += patternPenalties(matrix);
+		penalty += adjacentPenalties(matrix);
+		penalty += squarePenalties(matrix);
 		
+		System.out.println(penalty);
 		
 		return penalty;
 	}
@@ -590,18 +594,35 @@ public class MatrixConstruction {
 		for (int i = 0; i < matrix.length; ++i) {
 			for (int j = 0; j < matrix.length; ++j) {
 				
-				boolean patternFound = false;
+				boolean colPatternFound = false, colPatternFailed = false;
+				boolean rowPatternFound = false, rowPatternFailed = false;
 				
 				for (int k = 0; k < PATTERN.length; ++k) {
-					final boolean BIT = (matrix[i][j + k] == B);
-					if (PATTERN[k] != BIT){
-						break;
-					} else if (k == PATTERN.length - 1) {
-						patternFound = true;
+					final boolean COL_BIT = (matrix[i][j + k] == B);
+					final boolean ROW_BIT = (matrix[i + k][j] == B);
+					
+					if (!colPatternFailed && PATTERN[k] != COL_BIT) {
+						colPatternFailed = true;
+					} else {
+						colPatternFound = !colPatternFailed && (k == PATTERN.length - 1);
+					}
+					
+					if (!rowPatternFailed && PATTERN[k] != ROW_BIT) {
+						rowPatternFailed = true;
+					} else {
+						rowPatternFound = !rowPatternFailed && (k == PATTERN.length - 1);
 					}
 				}
 				
-				if (patternFound) {
+				for (int k = PATTERN.length - 1; k >= 0; --k) {
+				
+				}
+				
+				if (colPatternFound) {
+					penalty += 40;
+				}
+				
+				if (rowPatternFound) {
 					penalty += 40;
 				}
 				
@@ -611,7 +632,7 @@ public class MatrixConstruction {
 		return penalty;
 	}
 	
-	private static int adjacentPenalties(int[][] matrix){
+	public static int adjacentPenalties(int[][] matrix){
 		
 		// Count penalty of the pattern {0,0,0,...} or {1,1,1,...}
 		int penalty = 0;
@@ -624,34 +645,34 @@ public class MatrixConstruction {
 			countRow = 1;
 			countColumn = 1;
 			
-			for (int j = 1; j < matrix[i].length; ++j) {
-				if (matrix[j][i] == colorColumn){
+			for (int j = 0; j < matrix[i].length; ++j) {
+				if (matrix[j][i] == colorColumn) {
 					++countColumn;
 				} else {
 					colorColumn = matrix[j][i];
-					if(countColumn >= 3){
+					if (countColumn >= 3) {
 						penalty += countColumn;
 					}
 					countColumn = 0;
 				}
 				
 				
-				if (matrix[i][j] == colorRow){
+				if (matrix[i][j] == colorRow) {
 					++countRow;
 				} else {
 					colorRow = matrix[i][j];
-					if(countRow >= 3){
+					if (countRow >= 3) {
 						penalty += countRow;
 					}
 					countRow = 0;
 				}
 			}
 			
-			if(countRow >= 3){
+			if (countRow >= 3) {
 				penalty += countRow;
 			}
 			
-			if(countColumn >= 3){
+			if (countColumn >= 3) {
 				penalty += countColumn;
 			}
 		}
