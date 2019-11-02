@@ -580,7 +580,7 @@ public class MatrixConstruction {
 		penalty += adjacentPenalties(matrix);
 		penalty += squarePenalties(matrix);
 		
-		final int TOTAL_MODULES = matrix.length * matrix[0].length;
+		final int TOTAL_MODULES = matrix.length * matrix.length;
 		
 		int blackModulesCount = 0;
 		for (int i = 0; i < matrix.length; ++i) {
@@ -619,8 +619,8 @@ public class MatrixConstruction {
 				break;
 			}
 			
-			final boolean COL_BIT = (matrix[i][j + k] == B);
-			final boolean ROW_BIT = (matrix[i + k][j] == B);
+			final boolean COL_BIT = (matrix[i + k][j] == B);
+			final boolean ROW_BIT = (matrix[i][j + k] == B);
 			
 			if (!colPatternFailed && pattern[k] != COL_BIT) {
 				colPatternFailed = true;
@@ -657,7 +657,9 @@ public class MatrixConstruction {
 		for (int i = 0; i < matrix.length; ++i) {
 			for (int j = 0; j < matrix.length; ++j) {
 				penalty += checkForPenaltyPattern(matrix, PATTERN_A, i, j);
-				penalty += checkForPenaltyPattern(matrix, PATTERN_B, i, j);
+				System.out.println(penalty);
+				penalty += checkForPenaltyPattern(matrix, PATTERN_B, j, i);
+				System.out.println(penalty);
 			}
 		}
 		
@@ -666,56 +668,53 @@ public class MatrixConstruction {
 	
 	public static int adjacentPenalties(int[][] matrix){
 		
-		// Count penalty of the pattern {0,0,0,...} or {1,1,1,...}
 		int penalty = 0;
-		int colorRow, countRow;
-		int colorColumn, countColumn;
 		
+		// Row penalty checking
 		for (int i = 0; i < matrix.length; ++i) {
-			colorRow = matrix[i][0];
-			colorColumn = matrix[0][i];
-			countRow = 1;
-			countColumn = 1;
+			int adjacentCount = 1;
+			boolean previousBit = matrix[0][i] == B;
 			
-			final int MAX_COUNT = 5;
-			
-			for (int j = 0; j < matrix[i].length; ++j) {
-				if (matrix[j][i] == colorColumn) {
-					++countColumn;
-				} else {
-					colorColumn = matrix[j][i];
-					if (countColumn == 5) {
-						penalty += 3;
-					}
-					if (countColumn > MAX_COUNT) {
-						penalty += countColumn;
-					}
-					countColumn = 0;
-				}
+			for (int j = 1; j < matrix.length; ++j) {
+				final boolean BIT = matrix[j][i] == B;
 				
-				
-				if (matrix[i][j] == colorRow) {
-					++countRow;
-				} else {
-					colorRow = matrix[i][j];
-					if (countRow == 5) {
+				if (BIT == previousBit) {
+					adjacentCount++;
+					
+					if (adjacentCount == 5) {
 						penalty += 3;
+					} else if (adjacentCount > 5) {
+						penalty++;
 					}
-					if (countRow > MAX_COUNT) {
-						penalty += countRow;
-					}
-					countRow = 0;
+					
+				} else {
+					previousBit = BIT;
+					adjacentCount = 1;
 				}
 			}
+		}
+		
+		// Column penalty checking
+		for (int i = 0; i < matrix.length; ++i) {
+			int adjacentCount = 1;
+			boolean previousBit = matrix[i][0] == B;
 			
-			if (countRow >= MAX_COUNT) {
-				penalty += 3;
-				penalty += countRow - 5;
-			}
-			
-			if (countColumn >= MAX_COUNT) {
-				penalty += 3;
-				penalty += countColumn - 5;
+			for (int j = 1; j < matrix.length; ++j) {
+				final boolean BIT = matrix[i][j] == B;
+				
+				if (BIT == previousBit) {
+					adjacentCount++;
+					
+					if (adjacentCount == 5) {
+						penalty += 3;
+					} else if (adjacentCount > 5) {
+						penalty++;
+					}
+					
+				} else {
+					previousBit = BIT;
+					adjacentCount = 1;
+				}
 			}
 		}
 		

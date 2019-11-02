@@ -2,14 +2,14 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "ALLO";
+	public static final String INPUT =  "0xSalut";
 
 	/*
 	 * Parameters
 	 */
 	public static final int VERSION = 1;
 	public static final int MASK = 0;
-	public static final int SCALING = 20;
+	public static final int SCALING = 40;
 
 	public static void main(String[] args) {
 
@@ -26,9 +26,9 @@ public class Main {
 		/*
 		 * Visualization
 		 */
-		//Helpers.show(qrCode, SCALING);
+		Helpers.show(qrCode, SCALING);
 		
-		QRCodeFrame frame = new QRCodeFrame();
+		//QRCodeFrame frame = new QRCodeFrame();
 	}
 
 }
