@@ -719,6 +719,7 @@ public class MatrixConstruction {
 		}
 		
 		System.out.println("Adjacent: " + penalty);
+		System.out.println("Zrb");
 		
 		return penalty;
 	}
