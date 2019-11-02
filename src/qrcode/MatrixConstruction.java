@@ -717,7 +717,7 @@ public class MatrixConstruction {
 				}
 			}
 		}
-		
+		System.out.println("pUTE");
 		System.out.println("Adjacent: " + penalty);
 		
 		return penalty;
