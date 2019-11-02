@@ -718,8 +718,6 @@ public class MatrixConstruction {
 			}
 		}
 		
-		System.out.println("Allo");
-		
 		System.out.println("Adjacent: " + penalty);
 		
 		return penalty;
