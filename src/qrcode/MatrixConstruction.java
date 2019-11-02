@@ -1,5 +1,7 @@
 package qrcode;
 
+import java.util.Arrays;
+
 import static qrcode.Util.*;
 
 public class MatrixConstruction {
@@ -93,9 +95,7 @@ public class MatrixConstruction {
 		int[][] matrix = new int[SIZE][SIZE];
 		
 		for (int i = 0; i < SIZE; ++i) {
-			for (int j = 0; j < SIZE; ++j) {
-				matrix[i][j] = 0;
-			}
+			Arrays.fill(matrix[i], 0);
 		}
 		
 		return matrix;
@@ -677,7 +677,6 @@ public class MatrixConstruction {
 			countRow = 1;
 			countColumn = 1;
 			
-			// TODO: change max count to 3
 			final int MAX_COUNT = 5;
 			
 			for (int j = 0; j < matrix[i].length; ++j) {
@@ -685,7 +684,10 @@ public class MatrixConstruction {
 					++countColumn;
 				} else {
 					colorColumn = matrix[j][i];
-					if (countColumn >= MAX_COUNT) {
+					if (countColumn == 5) {
+						penalty += 3;
+					}
+					if (countColumn > MAX_COUNT) {
 						penalty += countColumn;
 					}
 					countColumn = 0;
@@ -696,7 +698,10 @@ public class MatrixConstruction {
 					++countRow;
 				} else {
 					colorRow = matrix[i][j];
-					if (countRow >= MAX_COUNT) {
+					if (countRow == 5) {
+						penalty += 3;
+					}
+					if (countRow > MAX_COUNT) {
 						penalty += countRow;
 					}
 					countRow = 0;
@@ -704,13 +709,17 @@ public class MatrixConstruction {
 			}
 			
 			if (countRow >= MAX_COUNT) {
-				penalty += countRow;
+				penalty += 3;
+				penalty += countRow - 5;
 			}
 			
 			if (countColumn >= MAX_COUNT) {
-				penalty += countColumn;
+				penalty += 3;
+				penalty += countColumn - 5;
 			}
 		}
+		
+		System.out.println("Adjacent: " + penalty);
 		
 		return penalty;
 	}
@@ -729,6 +738,8 @@ public class MatrixConstruction {
 				}
 			}
 		}
+		
+		System.out.println("Square: " + penalty);
 		
 		return penalty;
 	}
