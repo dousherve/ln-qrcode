@@ -739,7 +739,7 @@ public class MatrixConstruction {
 		}
 		
 		System.out.println("Square: " + penalty);
-		
+        System.out.println("Caca");
 		return penalty;
 	}
 
