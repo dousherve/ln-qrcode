@@ -17,7 +17,7 @@ public class QRCodeFrame extends JFrame {
     
     private final int[] VERSIONS = {1, 2, 3, 4};
     private JComboBox<Integer> versionCombo = new JComboBox<>();
-    private final int[] MASKS = {1, 2, 3, 4, 5, 6, 7};
+    private final int[] MASKS = {0, 1, 2, 3, 4, 5, 6, 7};
     private JComboBox<Integer> maskCombo = new JComboBox<>();
     private JTextField scaleTextField = new JTextField();
     
@@ -74,7 +74,7 @@ public class QRCodeFrame extends JFrame {
     
     private void showMatrix() {
         int version = versionCombo.getSelectedIndex() + 1;
-        int mask = maskCombo.getSelectedIndex() + 1;
+        int mask = maskCombo.getSelectedIndex();
         int scale = Integer.parseInt(scaleTextField.getText().trim());
         boolean[] encodedData = DataEncoding.byteModeEncoding(contentTextArea.getText(), version);
         int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData, mask);

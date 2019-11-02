@@ -2,13 +2,13 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "Salut comment ça va wesh bien";
+	public static final String INPUT =  "ALLO";
 
 	/*
 	 * Parameters
 	 */
-	public static final int VERSION = 4;
-	public static final int MASK = 7;
+	public static final int VERSION = 1;
+	public static final int MASK = 0;
 	public static final int SCALING = 20;
 
 	public static void main(String[] args) {

@@ -39,6 +39,7 @@ public class MatrixConstruction {
 		 * PART 3
 		 */
 		addDataInformation(matrix, data, mask);
+		evaluate(matrix);
 
 		return matrix;
 	}
@@ -579,53 +580,84 @@ public class MatrixConstruction {
 		penalty += adjacentPenalties(matrix);
 		penalty += squarePenalties(matrix);
 		
+		final int TOTAL_MODULES = matrix.length * matrix[0].length;
+		
+		int blackModulesCount = 0;
+		for (int i = 0; i < matrix.length; ++i) {
+			for (int j = 0; j < matrix[i].length; ++j) {
+				if (matrix[i][j] == B) {
+					blackModulesCount++;
+				}
+			}
+		}
+		
+		final double BLACK_PERCENTAGE = ((double) blackModulesCount / (double) TOTAL_MODULES) * 100.0;
+		final int FLOORED_PERC = (int) Math.floor(BLACK_PERCENTAGE);
+		
+		final int PREV_PERC = FLOORED_PERC - (FLOORED_PERC % 5);
+		final int NEXT_PERC = PREV_PERC + 5;
+		final int ABS_PREV = Math.abs(PREV_PERC - 50);
+		final int ABS_NEXT = Math.abs(NEXT_PERC - 50);
+		
+		penalty += Math.min(ABS_PREV, ABS_NEXT) * 2;
+		
 		System.out.println(penalty);
+		
+		return penalty;
+	}
+	
+	public static int checkForPenaltyPattern(int[][] matrix, boolean[] pattern, int i, int j) {
+		
+		int penalty = 0;
+		
+		boolean colPatternFound = false, colPatternFailed = false;
+		boolean rowPatternFound = false, rowPatternFailed = false;
+		
+		for (int k = 0; k < pattern.length; ++k) {
+			
+			if (i + k >= matrix.length || j + k >= matrix.length) {
+				break;
+			}
+			
+			final boolean COL_BIT = (matrix[i][j + k] == B);
+			final boolean ROW_BIT = (matrix[i + k][j] == B);
+			
+			if (!colPatternFailed && pattern[k] != COL_BIT) {
+				colPatternFailed = true;
+			} else {
+				colPatternFound = !colPatternFailed && (k == pattern.length - 1);
+			}
+			
+			if (!rowPatternFailed && pattern[k] != ROW_BIT) {
+				rowPatternFailed = true;
+			} else {
+				rowPatternFound = !rowPatternFailed && (k == pattern.length - 1);
+			}
+		}
+		
+		if (colPatternFound) {
+			penalty += 40;
+		}
+		
+		if (rowPatternFound) {
+			penalty += 40;
+		}
 		
 		return penalty;
 	}
 	
 	public static int patternPenalties(int[][] matrix) {
 		
-		final boolean[] PATTERN = {false, false, false, false, true, false, true, true, true, false, true};
+		final boolean[] PATTERN_A = {false, false, false, false, true, false, true, true, true, false, true};
+		final boolean[] PATTERN_B = {true, false, true, true, true, false, true, false, false, false, false};
 		
 		int penalty = 0;
 		
 		// Test all the columns to find the pattern
 		for (int i = 0; i < matrix.length; ++i) {
 			for (int j = 0; j < matrix.length; ++j) {
-				
-				boolean colPatternFound = false, colPatternFailed = false;
-				boolean rowPatternFound = false, rowPatternFailed = false;
-				
-				for (int k = 0; k < PATTERN.length; ++k) {
-					final boolean COL_BIT = (matrix[i][j + k] == B);
-					final boolean ROW_BIT = (matrix[i + k][j] == B);
-					
-					if (!colPatternFailed && PATTERN[k] != COL_BIT) {
-						colPatternFailed = true;
-					} else {
-						colPatternFound = !colPatternFailed && (k == PATTERN.length - 1);
-					}
-					
-					if (!rowPatternFailed && PATTERN[k] != ROW_BIT) {
-						rowPatternFailed = true;
-					} else {
-						rowPatternFound = !rowPatternFailed && (k == PATTERN.length - 1);
-					}
-				}
-				
-				for (int k = PATTERN.length - 1; k >= 0; --k) {
-				
-				}
-				
-				if (colPatternFound) {
-					penalty += 40;
-				}
-				
-				if (rowPatternFound) {
-					penalty += 40;
-				}
-				
+				penalty += checkForPenaltyPattern(matrix, PATTERN_A, i, j);
+				penalty += checkForPenaltyPattern(matrix, PATTERN_B, i, j);
 			}
 		}
 		
@@ -645,12 +677,15 @@ public class MatrixConstruction {
 			countRow = 1;
 			countColumn = 1;
 			
+			// TODO: change max count to 3
+			final int MAX_COUNT = 5;
+			
 			for (int j = 0; j < matrix[i].length; ++j) {
 				if (matrix[j][i] == colorColumn) {
 					++countColumn;
 				} else {
 					colorColumn = matrix[j][i];
-					if (countColumn >= 3) {
+					if (countColumn >= MAX_COUNT) {
 						penalty += countColumn;
 					}
 					countColumn = 0;
@@ -661,18 +696,18 @@ public class MatrixConstruction {
 					++countRow;
 				} else {
 					colorRow = matrix[i][j];
-					if (countRow >= 3) {
+					if (countRow >= MAX_COUNT) {
 						penalty += countRow;
 					}
 					countRow = 0;
 				}
 			}
 			
-			if (countRow >= 3) {
+			if (countRow >= MAX_COUNT) {
 				penalty += countRow;
 			}
 			
-			if (countColumn >= 3) {
+			if (countColumn >= MAX_COUNT) {
 				penalty += countColumn;
 			}
 		}
