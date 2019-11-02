@@ -719,7 +719,6 @@ public class MatrixConstruction {
 		}
 		
 		System.out.println("Adjacent: " + penalty);
-		System.out.println("Zrb");
 		
 		return penalty;
 	}
@@ -740,8 +739,6 @@ public class MatrixConstruction {
 		}
 		
 		System.out.println("Square: " + penalty);
-        System.out.println("Caca");
-		System.out.println("octopute");
 		return penalty;
 	}
 
