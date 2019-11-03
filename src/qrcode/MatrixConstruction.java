@@ -1,5 +1,6 @@
 package qrcode;
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 
 import static qrcode.Util.*;
@@ -605,44 +606,50 @@ public class MatrixConstruction {
 		
 		return penalty;
 	}
-	
+
+	/**
+	 * Check if a pattern begin at [i][j] in the matrix
+	 *
+	 * @param matrix:
+	 *              matrix in which we are looking for pattern
+	 * @param pattern:
+	 *               pattern we are looking for
+	 * @param i
+	 * @param j
+	 * @return the penalty
+	 */
+
 	public static int checkForPenaltyPattern(int[][] matrix, boolean[] pattern, int i, int j) {
 		
 		int penalty = 0;
-		
-		boolean colPatternFound = false, colPatternFailed = false;
-		boolean rowPatternFound = false, rowPatternFailed = false;
-		
-		for (int k = 0; k < pattern.length; ++k) {
-			
-			if (i + k >= matrix.length || j + k >= matrix.length) {
-				break;
-			}
-			
-			final boolean COL_BIT = (matrix[i + k][j] == B);
-			final boolean ROW_BIT = (matrix[i][j + k] == B);
-			
-			if (!colPatternFailed && pattern[k] != COL_BIT) {
-				colPatternFailed = true;
-			} else {
-				colPatternFound = !colPatternFailed && (k == pattern.length - 1);
-			}
-			
-			if (!rowPatternFailed && pattern[k] != ROW_BIT) {
-				rowPatternFailed = true;
-			} else {
-				rowPatternFound = !rowPatternFailed && (k == pattern.length - 1);
+		final int MATRIX_SIZE = matrix.length;
+
+		//column
+		if(MATRIX_SIZE-j >= pattern.length) { //optimisation to don't looking for a pattern when the size don't allow it
+			for (int k = 0; k < pattern.length && j + k < MATRIX_SIZE; ++k) {
+				boolean bit = matrix[i][j + k] == B;
+				if (bit != pattern[k]) {
+					break;
+				} else if (k == pattern.length - 1) {
+					//column pattern found
+					penalty += 40;
+				}
 			}
 		}
-		
-		if (colPatternFound) {
-			penalty += 40;
+
+		//row
+		if(MATRIX_SIZE-i >= pattern.length) {
+			for (int k = 0; k < pattern.length && i + k < MATRIX_SIZE; ++k) {
+				boolean bit = matrix[i + k][j] == B;
+				if (bit != pattern[k]) {
+					break;
+				} else if (k == pattern.length - 1) {
+					//row pattern found
+					penalty += 40;
+				}
+			}
 		}
-		
-		if (rowPatternFound) {
-			penalty += 40;
-		}
-		
+
 		return penalty;
 	}
 	
@@ -652,17 +659,15 @@ public class MatrixConstruction {
 		final boolean[] PATTERN_B = {true, false, true, true, true, false, true, false, false, false, false};
 		
 		int penalty = 0;
-		
+
 		// Test all the columns to find the pattern
 		for (int i = 0; i < matrix.length; ++i) {
 			for (int j = 0; j < matrix.length; ++j) {
 				penalty += checkForPenaltyPattern(matrix, PATTERN_A, i, j);
-				System.out.println(penalty);
 				penalty += checkForPenaltyPattern(matrix, PATTERN_B, j, i);
-				System.out.println(penalty);
 			}
 		}
-		
+		System.out.println("Pattern: " + penalty);
 		return penalty;
 	}
 	
@@ -670,53 +675,51 @@ public class MatrixConstruction {
 		
 		int penalty = 0;
 		
-		// Row penalty checking
+
 		for (int i = 0; i < matrix.length; ++i) {
-			int adjacentCount = 1;
-			boolean previousBit = matrix[0][i] == B;
-			
+			int adjacentCountRow = 1;
+			boolean previousBitRow = matrix[0][i] == B;
+			int adjacentCountCol = 1;
+			boolean previousBitCol = matrix[i][0] == B;
+
+			// Row penalty checking
 			for (int j = 1; j < matrix.length; ++j) {
-				final boolean BIT = matrix[j][i] == B;
+				boolean bitRow = matrix[j][i] == B;
 				
-				if (BIT == previousBit) {
-					adjacentCount++;
+				if (bitRow == previousBitRow) {
+					adjacentCountRow++;
 					
-					if (adjacentCount == 5) {
+					if (adjacentCountRow == 5) {
 						penalty += 3;
-					} else if (adjacentCount > 5) {
+					} else if (adjacentCountRow > 5) {
 						penalty++;
 					}
 					
 				} else {
-					previousBit = BIT;
-					adjacentCount = 1;
+					previousBitRow = bitRow;
+					adjacentCountRow = 1;
 				}
-			}
-		}
-		
-		// Column penalty checking
-		for (int i = 0; i < matrix.length; ++i) {
-			int adjacentCount = 1;
-			boolean previousBit = matrix[i][0] == B;
-			
-			for (int j = 1; j < matrix.length; ++j) {
-				final boolean BIT = matrix[i][j] == B;
-				
-				if (BIT == previousBit) {
-					adjacentCount++;
-					
-					if (adjacentCount == 5) {
+
+
+				// Column penalty checking
+				boolean bitCol = matrix[i][j] == B;
+
+				if (bitCol == previousBitCol) {
+					adjacentCountCol++;
+
+					if (adjacentCountCol == 5) {
 						penalty += 3;
-					} else if (adjacentCount > 5) {
+					} else if (adjacentCountCol > 5) {
 						penalty++;
 					}
-					
+
 				} else {
-					previousBit = BIT;
-					adjacentCount = 1;
+					previousBitCol = bitCol;
+					adjacentCountCol = 1;
 				}
 			}
 		}
+
 		
 		System.out.println("Adjacent: " + penalty);
 		
