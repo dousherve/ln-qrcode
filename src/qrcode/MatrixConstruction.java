@@ -562,8 +562,27 @@ public class MatrixConstruction {
 	 * @return the mask number that minimize the penalty
 	 */
 	public static int findBestMasking(int version, boolean[] data) {
-		// TODO BONUS
-		return 0;
+
+		int[][] matrixToEvaluate = constructMatrix(version, 0);
+		addDataInformation(matrixToEvaluate, data, 0);
+
+		int bestMask = 0;
+		int bestMaskScore = evaluate(matrixToEvaluate);
+
+		for (int i = 1; i < 8; ++i) {
+			System.out.println("test du masque = "+i);
+			matrixToEvaluate = constructMatrix(version, i);
+			addDataInformation(matrixToEvaluate, data, i);
+			int score = evaluate(matrixToEvaluate);
+
+			if(score<bestMaskScore){
+				bestMask = i;
+				bestMaskScore = score;
+			}
+		}
+
+		System.out.println("mask final: "+bestMask);
+		return bestMask;
 	}
 
 	/**
