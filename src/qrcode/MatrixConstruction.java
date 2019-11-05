@@ -1,6 +1,5 @@
 package qrcode;
 
-import java.sql.SQLOutput;
 import java.util.Arrays;
 
 import static qrcode.Util.*;
@@ -34,14 +33,15 @@ public class MatrixConstruction {
 	 */
 	public static int[][] renderQRCodeMatrix(int version, boolean[] data, int mask) {
 
+		final int MASK = (mask < 0 || mask > 7) ? 0 : mask;
 		/*
 		 * PART 2
 		 */
-		int[][] matrix = constructMatrix(version, mask);
+		int[][] matrix = constructMatrix(version, MASK);
 		/*
 		 * PART 3
 		 */
-		addDataInformation(matrix, data, mask);
+		addDataInformation(matrix, data, MASK);
 		evaluate(matrix);
 
 		return matrix;
@@ -549,9 +549,8 @@ public class MatrixConstruction {
 	 */
 	public static int[][] renderQRCodeMatrix(int version, boolean[] data) {
 
-		int mask = findBestMasking(version, data);
-
-		return renderQRCodeMatrix(version, data, mask);
+		final int MASK = findBestMasking(version, data);
+		return renderQRCodeMatrix(version, data, MASK);
 	}
 
 	/**
@@ -570,18 +569,20 @@ public class MatrixConstruction {
 		int bestMaskScore = evaluate(matrixToEvaluate);
 
 		for (int i = 1; i < 8; ++i) {
-			System.out.println("test du masque = "+i);
+			// TODO: remove sout statement
+			System.out.println("Test du masque " + i);
 			matrixToEvaluate = constructMatrix(version, i);
 			addDataInformation(matrixToEvaluate, data, i);
 			int score = evaluate(matrixToEvaluate);
 
-			if(score<bestMaskScore){
+			if(score < bestMaskScore){
 				bestMask = i;
 				bestMaskScore = score;
 			}
 		}
 
-		System.out.println("mask final: "+bestMask);
+		// TODO: remove sout statement
+		System.out.println("Final mask: " + bestMask);
 		return bestMask;
 	}
 
@@ -621,6 +622,7 @@ public class MatrixConstruction {
 		
 		penalty += Math.min(ABS_PREV, ABS_NEXT) * 2;
 		
+		// TODO: remove sout statement
 		System.out.println(penalty);
 		
 		return penalty;
@@ -643,27 +645,27 @@ public class MatrixConstruction {
 		int penalty = 0;
 		final int MATRIX_SIZE = matrix.length;
 
-		//column
-		if(MATRIX_SIZE-j >= pattern.length) { //optimisation to don't looking for a pattern when the size don't allow it
-			for (int k = 0; k < pattern.length && j + k < MATRIX_SIZE; ++k) {
+		// Column
+		if (MATRIX_SIZE - j >= pattern.length) { // Optimisation: don't look for a pattern when the size doesn't allow it
+			for (int k = 0; (k < pattern.length) && (j + k < MATRIX_SIZE); ++k) {
 				boolean bit = matrix[i][j + k] == B;
 				if (bit != pattern[k]) {
 					break;
 				} else if (k == pattern.length - 1) {
-					//column pattern found
+					// Column pattern found
 					penalty += 40;
 				}
 			}
 		}
 
-		//row
-		if(MATRIX_SIZE-i >= pattern.length) {
-			for (int k = 0; k < pattern.length && i + k < MATRIX_SIZE; ++k) {
+		// Row
+		if (MATRIX_SIZE - i >= pattern.length) {
+			for (int k = 0; (k < pattern.length) && (i + k < MATRIX_SIZE); ++k) {
 				boolean bit = matrix[i + k][j] == B;
 				if (bit != pattern[k]) {
 					break;
 				} else if (k == pattern.length - 1) {
-					//row pattern found
+					// Row pattern found
 					penalty += 40;
 				}
 			}
@@ -686,6 +688,7 @@ public class MatrixConstruction {
 				penalty += checkForPenaltyPattern(matrix, PATTERN_B, j, i);
 			}
 		}
+		// TODO: remove sout statement
 		System.out.println("Pattern: " + penalty);
 		return penalty;
 	}
@@ -718,8 +721,8 @@ public class MatrixConstruction {
 					previousBitRow = bitRow;
 					adjacentCountRow = 1;
 				}
-
-
+				
+				// TODO: export a function
 				// Column penalty checking
 				boolean bitCol = matrix[i][j] == B;
 
@@ -738,8 +741,8 @@ public class MatrixConstruction {
 				}
 			}
 		}
-
 		
+		// TODO: remove sout statement
 		System.out.println("Adjacent: " + penalty);
 		
 		return penalty;
@@ -748,7 +751,7 @@ public class MatrixConstruction {
 	public static int squarePenalties(int[][] matrix) {
 		
 		int penalty = 0;
-		//count penalty for 2x2 squares
+		// Count penalty caused by 2x2 squares
 		for (int i = 0; i < matrix.length - 1; ++i) {
 			for (int j = 0; j < matrix.length - 1; ++j) {
 				int color = matrix[i][j];
@@ -760,6 +763,7 @@ public class MatrixConstruction {
 			}
 		}
 		
+		// TODO: remove sout statement
 		System.out.println("Square: " + penalty);
 		return penalty;
 	}

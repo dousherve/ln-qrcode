@@ -5,6 +5,8 @@ import java.awt.*;
 
 public class QRCodeFrame extends JFrame {
     
+    // TODO: implement the automatic selection
+    
     private final String TITLE = "QR Code Generator";
     private final Dimension DIMENSION = new Dimension(500, 250);
     
@@ -17,8 +19,8 @@ public class QRCodeFrame extends JFrame {
     
     private final int[] VERSIONS = {1, 2, 3, 4};
     private JComboBox<Integer> versionCombo = new JComboBox<>();
-    private final int[] MASKS = {0, 1, 2, 3, 4, 5, 6, 7};
-    private JComboBox<Integer> maskCombo = new JComboBox<>();
+    private final String[] MASKS = {"Auto", "0", "1", "2", "3", "4", "5", "6", "7"};
+    private JComboBox<String> maskCombo = new JComboBox<>();
     private JTextField scaleTextField = new JTextField();
     
     public QRCodeFrame() {
@@ -48,7 +50,7 @@ public class QRCodeFrame extends JFrame {
         northContainer.add(new JLabel("Version :"));
         northContainer.add(versionCombo);
         
-        for (int m : MASKS) {
+        for (String m : MASKS) {
             maskCombo.addItem(m);
         }
         northContainer.add(new JLabel("Mask :"));
@@ -74,10 +76,19 @@ public class QRCodeFrame extends JFrame {
     
     private void showMatrix() {
         int version = versionCombo.getSelectedIndex() + 1;
-        int mask = maskCombo.getSelectedIndex();
         int scale = Integer.parseInt(scaleTextField.getText().trim());
         boolean[] encodedData = DataEncoding.byteModeEncoding(contentTextArea.getText(), version);
-        int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData, mask);
+        
+        int mask = maskCombo.getSelectedIndex();
+        int[][] qrCode;
+        
+        if (mask == 0) {
+            // Automatic mask selection
+            qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData);
+        } else {
+            qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData, mask - 1);
+        }
+    
         Helpers.show(qrCode, scale);
     }
     
