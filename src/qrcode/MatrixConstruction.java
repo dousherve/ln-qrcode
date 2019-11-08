@@ -569,8 +569,6 @@ public class MatrixConstruction {
 		int bestMaskScore = evaluate(matrixToEvaluate);
 
 		for (int i = 1; i < 8; ++i) {
-			// TODO: remove sout statement
-			System.out.println("Test du masque " + i);
 			matrixToEvaluate = constructMatrix(version, i);
 			addDataInformation(matrixToEvaluate, data, i);
 			int score = evaluate(matrixToEvaluate);
@@ -581,8 +579,6 @@ public class MatrixConstruction {
 			}
 		}
 
-		// TODO: remove sout statement
-		System.out.println("Final mask: " + bestMask);
 		return bestMask;
 	}
 
@@ -621,12 +617,10 @@ public class MatrixConstruction {
 		final int ABS_NEXT = Math.abs(NEXT_PERC - 50);
 		
 		penalty += Math.min(ABS_PREV, ABS_NEXT) * 2;
-		
-		// TODO: remove sout statement
-		System.out.println(penalty);
-		
+
 		return penalty;
 	}
+
 
 	/**
 	 * Check if a pattern begin at [i][j] in the matrix
@@ -639,7 +633,6 @@ public class MatrixConstruction {
 	 * @param j
 	 * @return the penalty
 	 */
-
 	public static int checkForPenaltyPattern(int[][] matrix, boolean[] pattern, int i, int j) {
 		
 		int penalty = 0;
@@ -673,7 +666,14 @@ public class MatrixConstruction {
 
 		return penalty;
 	}
-	
+
+	/**
+	 *  Check for finder-like patterns
+	 *
+	 * @param matrix:
+	 *              the qr-code matrix to test
+	 * @return found penalties
+	 */
 	public static int patternPenalties(int[][] matrix) {
 		
 		final boolean[] PATTERN_A = {false, false, false, false, true, false, true, true, true, false, true};
@@ -688,11 +688,17 @@ public class MatrixConstruction {
 				penalty += checkForPenaltyPattern(matrix, PATTERN_B, j, i);
 			}
 		}
-		// TODO: remove sout statement
-		System.out.println("Pattern: " + penalty);
 		return penalty;
 	}
-	
+
+
+	/**
+	 * Check if there are pattern of at least 5 same color successively
+	 *
+	 * @param matrix:
+	 *              the qr-code matrix to test
+	 * @return found penalties
+	 */
 	public static int adjacentPenalties(int[][] matrix){
 		
 		int penalty = 0;
@@ -741,13 +747,15 @@ public class MatrixConstruction {
 				}
 			}
 		}
-		
-		// TODO: remove sout statement
-		System.out.println("Adjacent: " + penalty);
-		
 		return penalty;
 	}
-	
+
+	/**
+	 *  Check for 2x2 square pattern of the same color
+	 * @param matrix:
+	 *              the qr-code matrix to test
+	 * @return found penalties
+	 */
 	public static int squarePenalties(int[][] matrix) {
 		
 		int penalty = 0;
@@ -762,9 +770,6 @@ public class MatrixConstruction {
 				}
 			}
 		}
-		
-		// TODO: remove sout statement
-		System.out.println("Square: " + penalty);
 		return penalty;
 	}
 

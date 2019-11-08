@@ -5,11 +5,9 @@ import java.awt.*;
 
 public class QRCodeFrame extends JFrame {
     
-    // TODO: implement the automatic selection
-    
     private final String TITLE = "QR Code Generator";
     private final Dimension DIMENSION = new Dimension(500, 250);
-    
+
     private int version = 3;
     private int mask = 3;
     private int scale = 20;
