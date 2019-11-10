@@ -343,6 +343,9 @@ public class MatrixConstruction {
 	public static int maskColor(int col, int row, boolean dataBit, int masking) {
 		
 		final int MASKED_COLOR = booleanToColor(!dataBit);
+		
+		// A boolean expression that appears twice during the tests for
+		// masks 5 and 6.
 		final int CONDITION_PART_5_6 = ((col * row) % 2) + ((col * row) % 3);
 		
 		switch (masking) {
@@ -554,8 +557,8 @@ public class MatrixConstruction {
 	}
 
 	/**
-	 * Find the best mask to apply to a QRcode so that the penalty score is
-	 * minimized. Compute the penalty score with evaluate
+	 * Find the best mask to apply to the  QR code so that the penalty score is
+	 * minimized. Computing the penalty score with evaluate()
 	 * 
 	 * @param data
 	 * @return the mask number that minimize the penalty
@@ -569,20 +572,16 @@ public class MatrixConstruction {
 		int bestMaskScore = evaluate(matrixToEvaluate);
 
 		for (int i = 1; i < 8; ++i) {
-			// TODO: remove sout statement
-			System.out.println("Test du masque " + i);
 			matrixToEvaluate = constructMatrix(version, i);
 			addDataInformation(matrixToEvaluate, data, i);
-			int score = evaluate(matrixToEvaluate);
+			final int SCORE = evaluate(matrixToEvaluate);
 
-			if(score < bestMaskScore){
+			if(SCORE < bestMaskScore){
 				bestMask = i;
-				bestMaskScore = score;
+				bestMaskScore = SCORE;
 			}
 		}
 
-		// TODO: remove sout statement
-		System.out.println("Final mask: " + bestMask);
 		return bestMask;
 	}
 
@@ -621,25 +620,23 @@ public class MatrixConstruction {
 		final int ABS_NEXT = Math.abs(NEXT_PERC - 50);
 		
 		penalty += Math.min(ABS_PREV, ABS_NEXT) * 2;
-		
-		// TODO: remove sout statement
-		System.out.println(penalty);
-		
+
 		return penalty;
 	}
 
+
 	/**
-	 * Check if a pattern begin at [i][j] in the matrix
+	 * Check if a pattern begins at [i][j] in the matrix
+	 * and compute the corresponding penalty
 	 *
 	 * @param matrix:
-	 *              matrix in which we are looking for pattern
+	 *            the QR code in matrix form
 	 * @param pattern:
-	 *               pattern we are looking for
-	 * @param i
-	 * @param j
-	 * @return the penalty
+	 *            pattern we are looking for
+	 * @param i: column index
+	 * @param j: row index
+	 * @return the penalty score that corresponds to the given pattern
 	 */
-
 	public static int checkForPenaltyPattern(int[][] matrix, boolean[] pattern, int i, int j) {
 		
 		int penalty = 0;
@@ -673,7 +670,13 @@ public class MatrixConstruction {
 
 		return penalty;
 	}
-	
+
+	/**
+	 *  Check for finder-like patterns and compute the corresponding penalty
+	 *
+	 * @param matrix: the QR code in matrix form
+	 * @return the penalty score corresponding to the patterns
+	 */
 	public static int patternPenalties(int[][] matrix) {
 		
 		final boolean[] PATTERN_A = {false, false, false, false, true, false, true, true, true, false, true};
@@ -688,11 +691,18 @@ public class MatrixConstruction {
 				penalty += checkForPenaltyPattern(matrix, PATTERN_B, j, i);
 			}
 		}
-		// TODO: remove sout statement
-		System.out.println("Pattern: " + penalty);
 		return penalty;
 	}
-	
+
+
+	/**
+	 * Check if there exist patterns consisting
+	 * of at least 5 times the same color successively and compute
+	 * the corresponding penalty
+	 *
+	 * @param matrix: the QR code in matrix form
+	 * @return the penalty correspondig to this pattern
+	 */
 	public static int adjacentPenalties(int[][] matrix){
 		
 		int penalty = 0;
@@ -741,13 +751,15 @@ public class MatrixConstruction {
 				}
 			}
 		}
-		
-		// TODO: remove sout statement
-		System.out.println("Adjacent: " + penalty);
-		
 		return penalty;
 	}
-	
+
+	/**
+	 *  Check if there exist 2x2 squares of the same color
+	 *  and compute the corresponding penalty
+	 * @param matrix: the QR code in matrix form
+	 * @return the penalty corresponding to the 2x2 square pattern
+	 */
 	public static int squarePenalties(int[][] matrix) {
 		
 		int penalty = 0;
@@ -762,9 +774,6 @@ public class MatrixConstruction {
 				}
 			}
 		}
-		
-		// TODO: remove sout statement
-		System.out.println("Square: " + penalty);
 		return penalty;
 	}
 
