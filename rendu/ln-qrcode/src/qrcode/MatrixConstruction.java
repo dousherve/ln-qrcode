@@ -731,8 +731,7 @@ public class MatrixConstruction {
 					previousBitRow = bitRow;
 					adjacentCountRow = 1;
 				}
-				
-				// TODO: export a function
+
 				// Column penalty checking
 				boolean bitCol = matrix[i][j] == B;
 
