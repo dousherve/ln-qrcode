@@ -32,10 +32,10 @@ public class Main {
 		 * Visualization
 		 */
 		
-		//Helpers.show(qrCode, SCALING);
+		Helpers.show(qrCode, SCALING);
 		
 		// Small GUI
-		QRCodeFrame frame = new QRCodeFrame();
+		// QRCodeFrame frame = new QRCodeFrame();
 	}
 
 }

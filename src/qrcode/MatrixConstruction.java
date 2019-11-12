@@ -441,7 +441,7 @@ public class MatrixConstruction {
 		if (isWritable(RIGHT)) {
 			if (dataIndex < data.length) {
 				writeBit(matrix, col, row, data[dataIndex], mask);
-				dataIndex++;
+				++dataIndex;
 			} else {
 				writeBit(matrix, col, row, false, mask);
 			}
@@ -450,7 +450,7 @@ public class MatrixConstruction {
 		if (isWritable(LEFT)) {
 			if (dataIndex < data.length) {
 				writeBit(matrix, col - 1, row, data[dataIndex], mask);
-				dataIndex++;
+				++dataIndex;
 			} else {
 				writeBit(matrix, col - 1, row, false, mask);
 			}
@@ -606,7 +606,7 @@ public class MatrixConstruction {
 		for (int i = 0; i < matrix.length; ++i) {
 			for (int j = 0; j < matrix[i].length; ++j) {
 				if (matrix[i][j] == B) {
-					blackModulesCount++;
+					++blackModulesCount;
 				}
 			}
 		}
@@ -719,12 +719,12 @@ public class MatrixConstruction {
 				boolean bitRow = matrix[j][i] == B;
 				
 				if (bitRow == previousBitRow) {
-					adjacentCountRow++;
+					++adjacentCountRow;
 					
 					if (adjacentCountRow == 5) {
 						penalty += 3;
 					} else if (adjacentCountRow > 5) {
-						penalty++;
+						++penalty;
 					}
 					
 				} else {
@@ -736,12 +736,12 @@ public class MatrixConstruction {
 				boolean bitCol = matrix[i][j] == B;
 
 				if (bitCol == previousBitCol) {
-					adjacentCountCol++;
+					++adjacentCountCol;
 
 					if (adjacentCountCol == 5) {
 						penalty += 3;
 					} else if (adjacentCountCol > 5) {
-						penalty++;
+						++penalty;
 					}
 
 				} else {

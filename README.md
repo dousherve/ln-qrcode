@@ -7,7 +7,9 @@
 ### Bonus implémentés
 - Petite interface graphique en Swing qui utilise `Helpers.show()`
 pour l'affichage de codes QR avec un certain masque et une
-certaine version. Pour l'afficher, décommenter la ligne `QRCodeFrame frame = new QRCodeFrame();`
+certaine version. L'interace nécessite donc la présence du fichier `Helpers.java`
+que vous nous avez mise à disposition, mais qui d'après les indications du programme de rendu
+n'a pas besoin d'être inclus dans cette archive. Pour l'afficher, décommenter la ligne `QRCodeFrame frame = new QRCodeFrame();`
 et commenter la ligne `Helpers.show(qrCode, SCALING);` du `main()`.
 - Méthodes `evaluate()`, `findBestMasking()` et toutes les méthodes écrites
  dans le but de modulariser et d'améliorer la clarté et la lisibilité du code. Par défaut, le masque choisi
@@ -28,6 +30,8 @@ TERRIER Noé, HERVÉ Louis | Octobre 2019 - EPFL
 ### Implemented bonuses
 - Small GUI written with Swing that uses `Helpers.show()`
 to display QR Codes with a specific mask and a specific version.
+Thus, the GUI relies on the file `Helpers.java` that you provided, but according to the
+submission server, we do not need to include the file in this archive.
 To display the GUI, remove the comment `QRCodeFrame frame = new QRCodeFrame();`
 and comment the line `Helpers.show(qrCode, SCALING);` of the `main()` method.
 - `evaluate()`, `findBestMasking()` methods and various others methods written

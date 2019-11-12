@@ -77,14 +77,14 @@ public class QRCodeFrame extends JFrame {
         int scale = Integer.parseInt(scaleTextField.getText().trim());
         boolean[] encodedData = DataEncoding.byteModeEncoding(contentTextArea.getText(), version);
         
-        int mask = maskCombo.getSelectedIndex();
+        int maskIndex = maskCombo.getSelectedIndex();
         int[][] qrCode;
         
-        if (mask == 0) {
+        if (maskIndex == 0) {
             // Automatic mask selection
             qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData);
         } else {
-            qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData, mask - 1);
+            qrCode = MatrixConstruction.renderQRCodeMatrix(version, encodedData, maskIndex - 1);
         }
     
         Helpers.show(qrCode, scale);
